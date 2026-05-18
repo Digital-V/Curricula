@@ -376,13 +376,11 @@
                 const tbody = document.getElementById('sched-body');
                 tbody.innerHTML = '';
                 
-                // Track which cells are already covered by rowspan
                 const coveredCells = {};
                 
                 TIMES.forEach((t, timeIndex) => {
                     const tr = document.createElement('tr');
                     
-                    // Time cell
                     const timeCell = document.createElement('td');
                     timeCell.textContent = t;
                     tr.appendChild(timeCell);
@@ -390,7 +388,6 @@
                     DAYS.forEach((day, di) => {
                         const cellKey = `${di}-${timeIndex}`;
                         
-                        // Skip if this cell is already covered by a previous rowspan
                         if (coveredCells[cellKey]) {
                             return;
                         }
@@ -406,7 +403,6 @@
                         const td = document.createElement('td');
                         
                         if (found) {
-                            // Calculate rowspan by counting consecutive slots
                             let rowspan = 1;
                             for (let i = timeIndex + 1; i < TIMES.length; i++) {
                                 if (found.info.times.includes(TIMES[i])) {
@@ -416,7 +412,6 @@
                                 }
                             }
                             
-                            // Mark all cells covered by this rowspan
                             for (let i = 0; i < rowspan; i++) {
                                 const key = `${di}-${timeIndex + i}`;
                                 coveredCells[key] = true;
@@ -490,7 +485,6 @@
                     return;
                 }
 
-                // Convert 24-hour format to 12-hour format
                 const convertTo12Hour = (timeStr) => {
                     const [hours, minutes] = timeStr.split(':').map(Number);
                     let hour12 = hours % 12 || 12;
@@ -500,14 +494,12 @@
                 const startHour12 = convertTo12Hour(startTimeValue);
                 const endHour12 = convertTo12Hour(endTimeValue);
 
-                // Find all matching times in TIMES array
                 const matchedSlots = [];
                 for (const timeSlot of TIMES) {
                     const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
                     const slotStartHour = parseInt(startPart.split(':')[0]);
                     const slotEndHour = parseInt(endPart.split(':')[0]);
                     
-                    // Check if slot is within the selected time range
                     if (slotStartHour >= startHour12 && slotEndHour <= endHour12) {
                         matchedSlots.push(timeSlot);
                     }
