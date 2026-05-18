@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Tracker</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                font-family: monospace;
+            }
+
+            header{
+                display: flex;
+                align-items: center;
+                border-radius: 40px;
+                background-color: #005201;
+                margin: 10px 20px 20px 20px;
+                height: 70px;
+            }
+
+            header h3{
+                text-align: left;
+                padding: 20px;
+                font-size: 1.5rem;
+                color: white;
+            }
+
+            header h2{
+                background-color: white;
+                color: #005201;
+                padding: 12px 30px;
+                border-radius: 50px;
+                margin-left: auto;
+                margin-right: 20px;
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+
+            header img{
+                aspect-ratio: 1/1;
+                height: 40px;
+                border-radius: 50%;
+                padding: 20px;
+            }
+
+            #grid{
+                display: grid;
+                grid-template-columns: 1fr 4fr;
+            }
+
+            .sidebar{
+                background-color: #005201;
+                border-radius: 0 40px 40px 0;
+                height: 730px;
+                padding: 20px
+            }
+
+            .sidebar button{
+                margin: 20px 20px 20px -40px;
+                padding: 30px 0 30px 50px;
+                display: flex;
+                border-radius: 0 50px 50px 0;
+                width: 300px;
+                background-color: #ddf2df;
+                color: #005201;
+                border: 0;
+                font-weight: 900;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: 0.3s ease;
+            }
+
+            .sidebar button:hover{
+                transform: translateX(20px);
+            }
+
+            .maintab {
+                padding: 20px;
+                margin: 0 25px 0 20px;
+                background-color: #ddf2df;
+                border-radius: 40px;
+            }
+            
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <img src="Caleb ID.jpg">
+            <h3>Dela Cruz, Juan A. | 2510123456</h3>
+            <h2>Student</h2>
+        </header>
+        <div id="grid">
+            <div class="sidebar">
+                <button>Daily Schedule</button>
+                <button>Attendance Tracker</button>
+                <button>To-Do List</button>
+                <button>GWA Calculator</button>
+            </div>
+            <div class="maintab">
+                <h1>Welcome!</h1>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>
