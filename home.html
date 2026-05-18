@@ -7,7 +7,7 @@
             *{
                 margin: 0;
                 padding: 0;
-                font-family: monospace;
+                font-family: 'DM Sans', sans-serif;
             }
 
             header{
@@ -22,18 +22,18 @@
             header h3{
                 text-align: left;
                 padding: 20px;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 color: white;
             }
 
             header h2{
                 background-color: white;
                 color: #005201;
-                padding: 12px 30px;
+                padding: 10px 30px;
                 border-radius: 50px;
                 margin-left: auto;
                 margin-right: 20px;
-                font-size: 1.2rem;
+                font-size: 1rem;
                 font-weight: 700;
             }
 
@@ -47,26 +47,28 @@
             #grid{
                 display: grid;
                 grid-template-columns: 1fr 4fr;
+                gap: 0;
+                height: 900px;
+                align-items: stretch;
             }
 
             .sidebar{
                 background-color: #005201;
                 border-radius: 0 40px 40px 0;
-                height: 730px;
                 padding: 20px
             }
 
             .sidebar button{
                 margin: 20px 20px 20px -40px;
-                padding: 30px 0 30px 50px;
+                padding: 20px 0 20px 40px;
                 display: flex;
                 border-radius: 0 50px 50px 0;
                 width: 300px;
                 background-color: #ddf2df;
                 color: #005201;
                 border: 0;
-                font-weight: 900;
-                font-size: 1.5rem;
+                font-weight: 1000;
+                font-size: 1.2rem;
                 cursor: pointer;
                 transition: 0.3s ease;
             }
@@ -75,14 +77,224 @@
                 transform: translateX(20px);
             }
 
+            .sidebar button.active{
+                background-color: #91c691;
+                color: #005201;
+                transform: translateX(20px);
+            }
+
             .maintab {
-                padding: 20px;
-                margin: 0 25px 0 20px;
+                padding: 10px 20px 10px 20px;
+                margin: 0 20px 0 20px;
                 background-color: #ddf2df;
                 border-radius: 40px;
             }
-            
 
+            .schedule-title {
+                font-size: 30px;
+                padding: 0 20px 0 20px;
+                font-weight: 1000;
+                color: #005201;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                margin-bottom: 16px;
+            }
+
+            .schedule-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px 20px 0 20px;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+
+            .schedule-header .schedule-title {
+                padding: 0;
+                margin-bottom: 0;
+                flex: 1;
+            }
+
+            .schedule-wrap { 
+                overflow-x: auto; 
+                border-radius: 12px; 
+            }
+
+            table.sched-table {
+                width: 100%; 
+                border-collapse: collapse;
+                font-size: 16px; 
+                background: rgba(255,255,255,0.8);
+                border-radius: 12px; 
+                overflow: hidden;
+            }
+
+            .sched-table th {
+                background: #005201; 
+                color: #fff;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 14px; 
+                font-weight: 700; 
+                letter-spacing: 0.08em;
+                text-transform: uppercase; 
+                padding: 18px; 
+                text-align: center;
+            }
+
+            .sched-table td {
+                border: 1px solid rgba(0,82,1,0.15);
+                padding: 16px 18px; 
+                text-align: center;
+                font-size: 14px; 
+                color: #1a1a1a; 
+                vertical-align: middle;
+                min-height: 80px;
+            }
+
+            .sched-table tr:nth-child(even) td { 
+                background: rgba(255,255,255,0.5); 
+            }
+
+            .sched-table td:first-child { 
+                font-weight: 700; 
+                color: #005201; 
+                background: rgba(0,82,1,0.08); 
+            }
+
+            .cell-block {
+                background: #005201; 
+                color: #fff;
+                border-radius: 8px; 
+                padding: 12px 16px;
+                font-size: 14px; 
+                font-weight: 600; 
+                line-height: 1.4;
+                display: inline-block;
+            }
+
+            .cell-block.light { 
+                background: #91c691; 
+                color: #005201; 
+            }
+
+            .add-course-btn {
+                background-color: #005201;
+                color: white;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 50px;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: background 0.3s;
+                white-space: nowrap;
+                margin-top: 10px;
+            }
+
+            .add-course-btn:hover {
+                background-color: #003d01;
+            }
+            
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal.show {
+                display: flex;
+            }
+
+            .modal-content {
+                background-color: #ddf2df;
+                padding: 24px;
+                border-radius: 20px;
+                width: 90%;
+                max-width: 500px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            }
+
+            .modal-header {
+                font-size: 18px;
+                font-weight: 700;
+                color: #005201;
+                margin-bottom: 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #005201;
+            }
+
+            .modal-form {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .modal-form label {
+                font-weight: 600;
+                color: #005201;
+                font-size: 13px;
+            }
+
+            .modal-form input,
+            .modal-form select {
+                padding: 10px 12px;
+                border-radius: 8px;
+                border: 1.5px solid #91c691;
+                font-size: 13px;
+                font-family: 'DM Sans', sans-serif;
+                outline: none;
+            }
+
+            .modal-buttons {
+                display: flex;
+                gap: 12px;
+                margin-top: 16px;
+            }
+
+            .modal-btn {
+                flex: 1;
+                padding: 10px 16px;
+                border: none;
+                border-radius: 50px;
+                font-weight: 700;
+                cursor: pointer;
+                font-size: 13px;
+            }
+
+            .modal-btn-primary {
+                background-color: #005201;
+                color: white;
+            }
+
+            .modal-btn-primary:hover {
+                background-color: #003d01;
+            }
+
+            .modal-btn-secondary {
+                background-color: transparent;
+                border: 1.5px solid #005201;
+                color: #005201;
+            }
+
+            .modal-btn-secondary:hover {
+                background-color: rgba(0,82,1,0.1);
+            }
         </style>
     </head>
     <body>
@@ -93,16 +305,238 @@
         </header>
         <div id="grid">
             <div class="sidebar">
-                <button>Daily Schedule</button>
-                <button>Attendance Tracker</button>
-                <button>To-Do List</button>
-                <button>GWA Calculator</button>
+                <button class="active" onclick="alert('Weekly Schedule')">Weekly Schedule</button>
+                <button onclick="window.location.href='attendance_tracker.html'">Attendance Tracker</button>
+                <button onclick="window.location.href='todo_list.html'">To-Do List</button>
+                <button onclick="window.location.href='gwa_calculator.html'">GWA Calculator</button>
             </div>
             <div class="maintab">
-                <h1>Welcome!</h1>
+                <div class="schedule-header">
+                    <div class="schedule-title">Weekly Schedule</div>
+                    <button class="add-course-btn" onclick="openAddModal()">+ Add Course</button>
+                </div>
+                <div class="schedule-wrap">
+                    <table class="sched-table" id="sched-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sched-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="addModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Add Course</span>
+                        <button class="modal-close" onclick="closeAddModal()">×</button>
+                    </div>
+                    <div class="modal-form">
+                        <label>Course Name</label>
+                        <input type="text" id="courseName" placeholder="e.g., Math 101">
+                        
+                        <label>Start Time</label>
+                        <input type="time" id="courseTimeStart">
+                        
+                        <label>End Time</label>
+                        <input type="time" id="courseTimeEnd">
+                        
+                        <label>Days (hold Ctrl to select multiple)</label>
+                        <select id="courseDays" multiple>
+                            <option value="0">Monday</option>
+                            <option value="1">Tuesday</option>
+                            <option value="2">Wednesday</option>
+                            <option value="3">Thursday</option>
+                            <option value="4">Friday</option>
+                        </select>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="modal-btn modal-btn-secondary" onclick="closeAddModal()">Cancel</button>
+                        <button class="modal-btn modal-btn-primary" onclick="saveAddCourse()">Add Course</button>
+                    </div>
+                </div>
             </div>
             
         </div>
+
+        <script>
+            const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+            const TIMES = ['7:00–8:00','8:00–9:00','9:00–10:00','10:00–11:00','11:00–12:00','1:00–2:00','2:00–3:00','3:00–4:00','4:00–5:00','5:00–6:00','6:00–7:00'];
+
+            let scheduleData = {};
+
+            function buildSchedule() {
+                const tbody = document.getElementById('sched-body');
+                tbody.innerHTML = '';
+                
+                // Track which cells are already covered by rowspan
+                const coveredCells = {};
+                
+                TIMES.forEach((t, timeIndex) => {
+                    const tr = document.createElement('tr');
+                    
+                    // Time cell
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = t;
+                    tr.appendChild(timeCell);
+                    
+                    DAYS.forEach((day, di) => {
+                        const cellKey = `${di}-${timeIndex}`;
+                        
+                        // Skip if this cell is already covered by a previous rowspan
+                        if (coveredCells[cellKey]) {
+                            return;
+                        }
+                        
+                        let found = null;
+                        for (const [name, info] of Object.entries(scheduleData)) {
+                            if (info.times.includes(t) && info.days.includes(di)) { 
+                                found = { name, info }; 
+                                break; 
+                            }
+                        }
+                        
+                        const td = document.createElement('td');
+                        
+                        if (found) {
+                            // Calculate rowspan by counting consecutive slots
+                            let rowspan = 1;
+                            for (let i = timeIndex + 1; i < TIMES.length; i++) {
+                                if (found.info.times.includes(TIMES[i])) {
+                                    rowspan++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            
+                            // Mark all cells covered by this rowspan
+                            for (let i = 0; i < rowspan; i++) {
+                                const key = `${di}-${timeIndex + i}`;
+                                coveredCells[key] = true;
+                            }
+                            
+                            td.innerHTML = `<span class="cell-block ${found.info.color}">${found.name}</span>`;
+                            td.rowSpan = rowspan;
+                        }
+                        
+                        tr.appendChild(td);
+                    });
+                    
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function addCourse(time, day) {
+                const course = prompt(`Add course for ${day} at ${time} (or leave blank to clear):`);
+                if (course !== null) {
+                    if (course.trim() === '') {
+                        for (const [name, info] of Object.entries(scheduleData)) {
+                            if (info.time === time && info.days.includes(DAYS.indexOf(day))) {
+                                delete scheduleData[name];
+                                break;
+                            }
+                        }
+                    } else {
+                        for (const [name, info] of Object.entries(scheduleData)) {
+                            if (info.time === time && info.days.includes(DAYS.indexOf(day))) {
+                                delete scheduleData[name];
+                                break;
+                            }
+                        }
+                        const uniqueName = course + ' (' + time + ' ' + day + ')';
+                        scheduleData[course] = {
+                            days: [DAYS.indexOf(day)],
+                            time: time,
+                            color: Math.random() > 0.5 ? 'light' : ''
+                        };
+                    }
+                    buildSchedule();
+                }
+            }
+            
+            function openAddModal() {
+                document.getElementById('addModal').classList.add('show');
+            }
+
+            function closeAddModal() {
+                document.getElementById('addModal').classList.remove('show');
+                document.getElementById('courseName').value = '';
+                document.getElementById('courseTimeStart').value = '';
+                document.getElementById('courseTimeEnd').value = '';
+                Array.from(document.getElementById('courseDays').options).forEach(opt => opt.selected = false);
+            }
+
+            function saveAddCourse() {
+                const courseName = document.getElementById('courseName').value.trim();
+                const startTimeValue = document.getElementById('courseTimeStart').value;
+                const endTimeValue = document.getElementById('courseTimeEnd').value;
+                const courseDaysSelect = document.getElementById('courseDays');
+                const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value));
+
+                if (!courseName || selectedDays.length === 0) {
+                    alert('Please enter a course name and select at least one day.');
+                    return;
+                }
+
+                if (!startTimeValue || !endTimeValue) {
+                    alert('Please select both start and end times.');
+                    return;
+                }
+
+                // Convert 24-hour format to 12-hour format
+                const convertTo12Hour = (timeStr) => {
+                    const [hours, minutes] = timeStr.split(':').map(Number);
+                    let hour12 = hours % 12 || 12;
+                    return hour12;
+                };
+
+                const startHour12 = convertTo12Hour(startTimeValue);
+                const endHour12 = convertTo12Hour(endTimeValue);
+
+                // Find all matching times in TIMES array
+                const matchedSlots = [];
+                for (const timeSlot of TIMES) {
+                    const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
+                    const slotStartHour = parseInt(startPart.split(':')[0]);
+                    const slotEndHour = parseInt(endPart.split(':')[0]);
+                    
+                    // Check if slot is within the selected time range
+                    if (slotStartHour >= startHour12 && slotEndHour <= endHour12) {
+                        matchedSlots.push(timeSlot);
+                    }
+                }
+
+                if (matchedSlots.length === 0) {
+                    alert('No matching time slots found. Please select from the available slots (7am-7pm).');
+                    return;
+                }
+
+                scheduleData[courseName] = {
+                    days: selectedDays,
+                    times: matchedSlots,
+                    color: Math.random() > 0.5 ? 'light' : ''
+                };
+
+                buildSchedule();
+                closeAddModal();
+            }
+            
+            window.onclick = function(event) {
+                const modal = document.getElementById('addModal');
+                if (event.target === modal) {
+                    closeAddModal();
+                }
+            }
+            
+            buildSchedule();
+        </script>
         
     </body>
 </html>
