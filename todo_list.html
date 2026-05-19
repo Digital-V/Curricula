@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Tracker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <img src="Caleb ID.jpg">
+            <h3>Dela Cruz, Juan A. | 2510123456</h3>
+            <h2>Student</h2>
+        </header>
+        <div id="grid">
+            <div class="sidebar">
+                <button onclick="window.location.href='home.html'">Daily Schedule</button>
+                <button onclick="window.location.href='attendance_tracker.html'">Attendance Tracker</button>
+                <button class="active" onclick="alert('To-Do List')">To-Do List</button>
+                <button onclick="window.location.href='gwa_calculator.html'">GWA Calculator</button>
+            </div>
+            <div class="maintab todo-maintab">
+                <div class="todo-title">
+                    To-Do List
+                    <div class="todo-counters">
+                        <div class="todo-counter">
+                            <div class="todo-counter-number" id="total-counter">0</div>
+                            <div class="todo-counter-label">Total</div>
+                        </div>
+                        <div class="todo-counter">
+                            <div class="todo-counter-number" id="completed-counter">0</div>
+                            <div class="todo-counter-label">Completed</div>
+                        </div>
+                        <div class="todo-counter">
+                            <div class="todo-counter-number" id="missed-counter">0</div>
+                            <div class="todo-counter-label">Missed</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="todo-filters">
+                    <button class="todo-filter-btn active" onclick="filterTodo('all',this)">All</button>
+                    <button class="todo-filter-btn" onclick="filterTodo('high',this)">High Priority</button>
+                    <button class="todo-filter-btn" onclick="filterTodo('medium',this)">Medium</button>
+                    <button class="todo-filter-btn" onclick="filterTodo('low',this)">Low</button>
+                    <button class="todo-filter-btn" onclick="filterTodo('pending',this)">Pending</button>
+                </div>
+                <div class="todo-list" id="todo-list"></div>
+                <div class="todo-add-form">
+                    <input type="text" id="todo-text" placeholder="Task description…" />
+                    <div class="todo-add-row">
+                        <select id="todo-priority">
+                            <option value="high">High Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                        <select id="todo-course"></select>
+                        <input type="date" id="todo-due" />
+                    </div>
+                    <div class="todo-add-row">
+                        <button class="todo-add-btn" onclick="addTodo()" style="width:100%">+ Add Task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function getCoursesFromHome() {
+                const stored = localStorage.getItem('scheduleData');
+                if (stored) {
+                    try {
+                        return Object.keys(JSON.parse(stored));
+                    } catch (e) {
+                        return [];
+                    }
+                }
+                return [];
+            }
+
+            function populateCourseSelector() {
+                const courseSelect = document.getElementById('todo-course');
+                if (!courseSelect) return;
+                courseSelect.innerHTML = '';
+                const courses = getCoursesFromHome();
+                courses.forEach(c => {
+                    const o = document.createElement('option'); 
+                    o.value = c; 
+                    o.textContent = c;
+                    courseSelect.appendChild(o);
+                });
+                const genOpt = document.createElement('option'); 
+                genOpt.value = 'General'; 
+                genOpt.textContent = 'General'; 
+                courseSelect.appendChild(genOpt);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', populateCourseSelector);
+            } else {
+                populateCourseSelector();
+            }
+
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    populateCourseSelector();
+                }
+            });
+
+            let todos = [];
+            let todoIdCounter = 1;
+            let activeFilter = 'all';
+
+            function formatDue(d) {
+                if(!d) return '';
+                const [y,m,day] = d.split('-');
+                return `${m}/${day}/${y}`;
+            }
+
+            function updateCounters() {
+                const totalCount = todos.filter(t => !t.done).length;
+                const completedCount = todos.filter(t => t.done).length;
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const missedCount = todos.filter(t => {
+                    if (t.done) return false;
+                    if (!t.due) return false;
+                    const dueDate = new Date(t.due);
+                    return dueDate < today;
+                }).length;
+                
+                document.getElementById('total-counter').textContent = totalCount;
+                document.getElementById('completed-counter').textContent = completedCount;
+                document.getElementById('missed-counter').textContent = missedCount;
+            }
+
+            function renderTodos() {
+                const list = document.getElementById('todo-list');
+                let filtered = todos.filter(t => {
+                    if(activeFilter === 'all') return true;
+                    if(activeFilter === 'pending') return !t.done;
+                    return t.priority === activeFilter;
+                });
+                list.innerHTML = '';
+                if(!filtered.length) { 
+                    list.innerHTML = '<div style="text-align:center;color:#5a8a6a;font-size:15px;padding:20px">No tasks here.</div>'; 
+                    updateCounters();
+                    return; 
+                }
+                filtered.forEach(t => {
+                    const el = document.createElement('div');
+                    el.className = `todo-item ${t.priority}`;
+                    el.innerHTML = `
+                        <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})"></div>
+                        <div class="todo-info">
+                            <span class="todo-text ${t.done?'done':''}">${t.text}</span>
+                            <div class="todo-meta">
+                                <span class="todo-badge badge-${t.priority}">${t.priority.charAt(0).toUpperCase()+t.priority.slice(1)}</span>
+                                <span class="todo-badge badge-course">${t.course}</span>
+                                ${t.due ? `<span class="todo-badge badge-due">📅 ${formatDue(t.due)}</span>` : ''}
+                            </div>
+                        </div>
+                        <button class="todo-delete" onclick="deleteTodo(${t.id})" title="Delete task">✕</button>`;
+                    list.appendChild(el);
+                });
+                updateCounters();
+            }
+            renderTodos();
+
+            function addTodo() {
+                const text = document.getElementById('todo-text').value.trim();
+                if(!text) return;
+                todos.unshift({
+                    id: todoIdCounter++,
+                    text,
+                    priority: document.getElementById('todo-priority').value,
+                    course: document.getElementById('todo-course').value,
+                    due: document.getElementById('todo-due').value,
+                    done: false,
+                });
+                document.getElementById('todo-text').value = '';
+                document.getElementById('todo-due').value = '';
+                renderTodos();
+            }
+
+            function toggleTodo(id) { 
+                const t = todos.find(x=>x.id===id); 
+                if(t) t.done=!t.done; 
+                renderTodos(); 
+            }
+
+            function deleteTodo(id) { 
+                todos = todos.filter(x=>x.id!==id); 
+                renderTodos(); 
+            }
+
+            function filterTodo(f, btn) {
+                activeFilter = f;
+                document.querySelectorAll('.todo-filter-btn').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                renderTodos();
+            }
+        </script>
+        
+    </body>
+</html>

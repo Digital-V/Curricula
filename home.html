@@ -7,7 +7,7 @@
     </head>
     <body>
         <header>
-            <img class="profile-img" role="button" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s" alt="" onclick="openPersonalInfo()">
+            <img src="Caleb ID.jpg">
             <h3>Dela Cruz, Juan A. | 2510123456</h3>
             <h2>Student</h2>
         </header>
@@ -22,6 +22,7 @@
                 <div class="schedule-header">
                     <div class="schedule-title">Weekly Schedule</div>
                     <button class="add-course-btn" onclick="openAddModal()">+ Add Course</button>
+                    <button class="clear-all-btn" onclick="clearAllCourses()">Clear All</button>
                 </div>
                 <div class="schedule-wrap">
                     <table class="sched-table" id="sched-table">
@@ -64,6 +65,21 @@
                             <option value="3">Thursday</option>
                             <option value="4">Friday</option>
                         </select>
+
+                        <label>Course Type</label>
+                        <div class="toggle-group">
+                            <div class="toggle-option">
+                                <input type="radio" id="courseMajor" name="courseType" value="major">
+                                <label for="courseMajor">Major</label>
+                            </div>
+                            <div class="toggle-option">
+                                <input type="radio" id="courseMinor" name="courseType" value="minor">
+                                <label for="courseMinor">Minor</label>
+                            </div>
+                        </div>
+
+                        <label>Room Number</label>
+                        <input type="text" id="courseRoom" placeholder="e.g., A101, Lab 5">
                     </div>
                     <div class="modal-buttons">
                         <button class="modal-btn modal-btn-secondary" onclick="closeAddModal()">Cancel</button>
@@ -71,44 +87,240 @@
                     </div>
                 </div>
             </div>
-            
-            <div id="personalInfoModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span>Personal Information</span>
-                        <button class="modal-close" onclick="closePersonalInfo()">×</button>
+
+            <div id="courseDetailModal" class="course-detail-modal">
+                <div class="course-detail-content">
+                    <div class="course-detail-header">
+                        <span id="courseDetailName">Course Name</span>
+                        <button class="course-detail-close" onclick="closeCourseDetailModal()">×</button>
                     </div>
-                    <div class="modal-form">
-                        <label>Name: </label>
-                        <input type="text" id="personalName">
-
-                        <label>Student Number: </label>
-                        <input type="text" id="personalStudentId">
-
-                        <label>Email: </label>
-                        <input type="email" id="personalEmail">
-
-                        <label>Contact Number: </label>
-                        <input type="tel" id="personalContact">
-
-                        <label>Program: </label>
-                        <input type="text" id="personalCourse">
-
-                        <label>Year Level: </label>
-                        <input type="number" id="personalYearLevel">
-                        
-                        <label>Section: </label>
-                        <input type="text" id="personalSection">
-
-                        <label>Status: </label>
-                        <select id="personalStatus">
-                            <option value="enrolled">Enrolled</option>
-                            <option value="dropped">Dropped</option>
-                        </select>
-                    </div> 
+                    <div class="course-detail-section">
+                        <div class="course-detail-label">Course Type</div>
+                        <div class="course-detail-value"><span id="courseDetailType" class="course-detail-badge">Major</span></div>
+                    </div>
+                    <div class="course-detail-section">
+                        <div class="course-detail-label">Room Number</div>
+                        <div class="course-detail-value" id="courseDetailRoom">—</div>
+                    </div>
+                    <div class="course-detail-section">
+                        <div class="course-detail-label">Days</div>
+                        <div class="course-detail-value" id="courseDetailDays">Monday, Wednesday, Friday</div>
+                    </div>
+                    <div class="course-detail-section">
+                        <div class="course-detail-label">Times</div>
+                        <div class="course-detail-value" id="courseDetailTimes">7:00–8:00, 9:00–10:00</div>
+                    </div>
+                    <button class="course-detail-delete" onclick="deleteCourse()">Delete Course</button>
                 </div>
-            </div>            
+            </div>
+            
         </div>
-        <script src="home.js"></script>
+
+        <script>
+            const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+            const TIMES = ['7:00–8:00','8:00–9:00','9:00–10:00','10:00–11:00','11:00–12:00','12:00–1:00','1:00–2:00','2:00–3:00','3:00–4:00','4:00–5:00','5:00–6:00','6:00–7:00'];
+
+            let scheduleData = {};
+            let selectedCourseName = '';
+
+            function loadScheduleData() {
+                const saved = localStorage.getItem('scheduleData');
+                if (saved) {
+                    scheduleData = JSON.parse(saved);
+                }
+            }
+
+            loadScheduleData();
+
+            function buildSchedule() {
+                const tbody = document.getElementById('sched-body');
+                tbody.innerHTML = '';
+                
+                const coveredCells = {};
+                
+                TIMES.forEach((t, timeIndex) => {
+                    const tr = document.createElement('tr');
+                    
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = t;
+                    tr.appendChild(timeCell);
+                    
+                    DAYS.forEach((day, di) => {
+                        const cellKey = `${di}-${timeIndex}`;
+                        
+                        if (coveredCells[cellKey]) {
+                            return;
+                        }
+                        
+                        let found = null;
+                        for (const [name, info] of Object.entries(scheduleData)) {
+                            if (info.times.includes(t) && info.days.includes(di)) { 
+                                found = { name, info }; 
+                                break; 
+                            }
+                        }
+                        
+                        const td = document.createElement('td');
+                        
+                        if (found) {
+                            let rowspan = 1;
+                            for (let i = timeIndex + 1; i < TIMES.length; i++) {
+                                if (found.info.times.includes(TIMES[i])) {
+                                    rowspan++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            
+                            for (let i = 0; i < rowspan; i++) {
+                                const key = `${di}-${timeIndex + i}`;
+                                coveredCells[key] = true;
+                            }
+                            
+                            td.innerHTML = `<span class="cell-block ${found.info.color}" onclick="openCourseDetailModal('${found.name}')" style="cursor: pointer;">${found.name}</span>`;
+                            td.rowSpan = rowspan;
+                        }
+                        
+                        tr.appendChild(td);
+                    });
+                    
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function openAddModal() {
+                document.getElementById('addModal').classList.add('show');
+            }
+
+            function closeAddModal() {
+                document.getElementById('addModal').classList.remove('show');
+                document.getElementById('courseName').value = '';
+                document.getElementById('courseTimeStart').value = '';
+                document.getElementById('courseTimeEnd').value = '';
+                Array.from(document.getElementById('courseDays').options).forEach(opt => opt.selected = false);
+                document.getElementById('courseRoom').value = '';
+                document.querySelectorAll('input[name="courseType"]').forEach(radio => radio.checked = false);
+            }
+
+            function saveAddCourse() {
+                const courseName = document.getElementById('courseName').value.trim();
+                const startTimeValue = document.getElementById('courseTimeStart').value;
+                const endTimeValue = document.getElementById('courseTimeEnd').value;
+                const courseDaysSelect = document.getElementById('courseDays');
+                const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value));
+                const courseType = document.querySelector('input[name="courseType"]:checked')?.value;
+                const courseRoom = document.getElementById('courseRoom').value.trim();
+
+                if (!courseName || selectedDays.length === 0) {
+                    alert('Please enter a course name and select at least one day.');
+                    return;
+                }
+
+                if (!startTimeValue || !endTimeValue) {
+                    alert('Please select both start and end times.');
+                    return;
+                }
+
+                if (!courseType) {
+                    alert('Please select a course type (Major or Minor).');
+                    return;
+                }
+
+                const startHour24 = parseInt(startTimeValue.split(':')[0]);
+                const endHour24 = parseInt(endTimeValue.split(':')[0]);
+
+                const matchedSlots = [];
+                for (const timeSlot of TIMES) {
+                    const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
+                    let slotStartHour = parseInt(startPart.split(':')[0]);
+                    let slotEndHour = parseInt(endPart.split(':')[0]);
+                    
+                    if (slotStartHour <= 6 && slotStartHour !== 0) {
+                        slotStartHour += 12;
+                    }
+                    if (slotEndHour <= 6 && slotEndHour !== 0) {
+                        slotEndHour += 12;
+                    } else if (slotEndHour < slotStartHour) {
+                        slotEndHour += 12;
+                    }
+                    
+                    if (slotStartHour >= startHour24 && slotEndHour <= endHour24) {
+                        matchedSlots.push(timeSlot);
+                    }
+                }
+
+                if (matchedSlots.length === 0) {
+                    alert('No matching time slots found. Please select from the available slots (7am-7pm).');
+                    return;
+                }
+
+                scheduleData[courseName] = {
+                    days: selectedDays,
+                    times: matchedSlots,
+                    color: Math.random() > 0.5 ? 'light' : '',
+                    type: courseType,
+                    room: courseRoom
+                };
+
+                localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+                buildSchedule();
+                closeAddModal();
+            }
+
+            function openCourseDetailModal(courseName) {
+                selectedCourseName = courseName;
+                const course = scheduleData[courseName];
+                
+                if (!course) return;
+
+                document.getElementById('courseDetailName').textContent = courseName;
+                document.getElementById('courseDetailType').textContent = course.type ? course.type.toUpperCase() : 'N/A';
+                document.getElementById('courseDetailRoom').textContent = course.room || '—';
+                
+                const dayNames = course.days.map(d => DAYS[d]).join(', ');
+                document.getElementById('courseDetailDays').textContent = dayNames;
+                
+                const times = course.times.join(', ');
+                document.getElementById('courseDetailTimes').textContent = times;
+                
+                document.getElementById('courseDetailModal').classList.add('show');
+            }
+
+            function closeCourseDetailModal() {
+                document.getElementById('courseDetailModal').classList.remove('show');
+                selectedCourseName = '';
+            }
+
+            function deleteCourse() {
+                if (confirm(`Delete course "${selectedCourseName}"?`)) {
+                    delete scheduleData[selectedCourseName];
+                    localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+                    buildSchedule();
+                    closeCourseDetailModal();
+                }
+            }
+
+            function clearAllCourses() {
+                if (confirm('Are you sure you want to delete ALL courses? This cannot be undone.')) {
+                    scheduleData = {};
+                    localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+                    buildSchedule();
+                }
+            }
+            
+            window.onclick = function(event) {
+                const modal = document.getElementById('addModal');
+                const detailModal = document.getElementById('courseDetailModal');
+                if (event.target === modal) {
+                    closeAddModal();
+                }
+                if (event.target === detailModal) {
+                    closeCourseDetailModal();
+                }
+            }
+            
+            buildSchedule();
+        </script>
+        
     </body>
 </html>

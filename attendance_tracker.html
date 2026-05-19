@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Tracker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <img src="Caleb ID.jpg">
+            <h3>Dela Cruz, Juan A. | 2510123456</h3>
+            <h2>Student</h2>
+        </header>
+        <div id="grid">
+            <div class="sidebar">
+                <button onclick="window.location.href='home.html'">Daily Schedule</button>
+                <button class="active" onclick="alert('Attendance Tracker')">Attendance Tracker</button>
+                <button onclick="window.location.href='todo_list.html'">To-Do List</button>
+                <button onclick="window.location.href='gwa_calculator.html'">GWA Calculator</button>
+            </div>
+            <div class="maintab">
+                <div class="att-section-title">Attendance by Course</div>
+                <div class="att-legend">
+                    <div class="att-legend-item"><div class="att-legend-dot" style="background:#005201"></div> Present</div>
+                    <div class="att-legend-item"><div class="att-legend-dot" style="background:#e57373"></div> Absent</div>
+                    <div class="att-legend-item"><div class="att-legend-dot" style="background:rgba(0,82,1,0.08); border:1px solid rgba(0,82,1,0.15)"></div> No class</div>
+                </div>
+                <div id="att-courses"></div>
+            </div>
+        </div>
+
+        <script>
+            const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+
+            let attState = {};
+
+            function getCoursesFromHome() {
+                const stored = localStorage.getItem('scheduleData');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+                return {};
+            }
+
+            function initializeAttendance() {
+                const scheduleData = getCoursesFromHome();
+                const courses = Object.keys(scheduleData);
+                const MAY_DAYS = Array.from({length:31}, (_,i) => i+1);
+
+                attState = {};
+                courses.forEach(c => {
+                    attState[c] = {};
+                    const info = scheduleData[c];
+                    if (!info || !Array.isArray(info.days)) return;
+                    
+                    MAY_DAYS.forEach(d => {
+                        const date = new Date(2025, 4, d);
+                        const dow = date.getDay();
+                        const mapped = dow - 1;
+                        
+                        if (info.days.includes(mapped)) {
+                            attState[c][d] = 'present';
+                        } else {
+                            attState[c][d] = 'no-class';
+                        }
+                    });
+                });
+            }
+
+            function buildAttendance() {
+                const scheduleData = getCoursesFromHome();
+                const courses = Object.keys(scheduleData);
+                const MAY_DAYS = Array.from({length:31}, (_,i) => i+1);
+                
+                if (courses.length === 0) {
+                    document.getElementById('att-courses').innerHTML = '<div style="text-align:center;color:#5a8a6a;font-size:12px;padding:20px">No courses added yet. Add courses from the Daily Schedule.</div>';
+                    return;
+                }
+
+                const container = document.getElementById('att-courses');
+                container.innerHTML = '';
+                courses.forEach(course => {
+                    const states = attState[course];
+                    const classDays = MAY_DAYS.filter(d => states[d] !== 'no-class' && states[d] !== 'future');
+                    const present = classDays.filter(d => states[d] === 'present').length;
+                    const total = classDays.length;
+
+                    const block = document.createElement('div');
+                    block.className = 'att-course-block';
+                    block.innerHTML = `
+                        <div class="att-course-header">
+                            <span class="att-course-name">${course}</span>
+                            <span class="att-stat">${present}/${total} present (${total ? Math.round(present/total*100) : 0}%)</span>
+                        </div>
+                        <div class="att-cal-grid">
+                            ${['S','M','T','W','T','F','S'].map(d=>`<div class="att-day-label">${d}</div>`).join('')}
+                            ${(() => {
+                                const firstDow = new Date(2025,4,1).getDay();
+                                let cells = '';
+                                for(let i=0;i<firstDow;i++) cells += `<div class="att-cell no-class"></div>`;
+                                MAY_DAYS.forEach(d => {
+                                    const s = states[d];
+                                    const cls = s === 'no-class' ? 'no-class' : s === 'future' ? '' : s;
+                                    const clickable = s !== 'no-class' && s !== 'future';
+                                    cells += `<div class="att-cell ${cls}" ${clickable ? `onclick="toggleAtt('${course}',${d})"` : ''} title="${clickable ? 'Click to toggle' : ''}">
+                                        <span>${d}</span>
+                                    </div>`;
+                                });
+                                return cells;
+                            })()}
+                        </div>`;
+                    container.appendChild(block);
+                });
+            }
+
+            function toggleAtt(course, day) {
+                const s = attState[course][day];
+                attState[course][day] = s === 'present' ? 'absent' : 'present';
+                buildAttendance();
+            }
+
+            initializeAttendance();
+            buildAttendance();
+
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    initializeAttendance();
+                    buildAttendance();
+                }
+            });
+        </script>
+        
+    </body>
+</html>
