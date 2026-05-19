@@ -4,11 +4,9 @@
         if (stored) {
             try { 
                 const parsed = JSON.parse(stored);
-                // Backward compatibility check
                 if (!Array.isArray(parsed)) {
                     return Object.keys(parsed); 
                 }
-                // Return unique array of course names
                 return [...new Set(parsed.map(c => c.name))];
             } catch (e) { return []; }
         }

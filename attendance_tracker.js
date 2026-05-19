@@ -14,7 +14,6 @@
         if (stored) {
             try { 
                 const parsed = JSON.parse(stored);
-                // Handle backwards compatibility if the data hasn't been migrated to array yet
                 if (!Array.isArray(parsed)) {
                     return Object.keys(parsed).map(key => ({ name: key, ...parsed[key] }));
                 }
@@ -26,8 +25,6 @@
 
     function initializeAttendance() {
         const scheduleData = getCoursesFromHome();
-        
-        // Extract unique course names since scheduleData is now an array
         const uniqueCourses = [...new Set(scheduleData.map(c => c.name))];
         
         const monthDays = getCurrentMonthDays();
@@ -38,8 +35,7 @@
         attState = {};
         uniqueCourses.forEach(courseName => {
             attState[courseName] = {};
-            
-            // Gather all days this specific course occurs
+    
             const instances = scheduleData.filter(c => c.name === courseName);
             const allDaysForCourse = instances.flatMap(c => c.days);
 
