@@ -84,7 +84,7 @@ function loadPersonalInfo() {
     }
 
     const stored = localStorage.getItem('personalInfo');
-    const placeholderSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s';
+    const placeholderSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s';
     if (!stored) {
         const preview = document.getElementById('personalPreview');
         const headerImg = document.querySelector('.profile-img');

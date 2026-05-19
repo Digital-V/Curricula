@@ -2,7 +2,15 @@
     function getCoursesFromHome() {
         const stored = localStorage.getItem('scheduleData');
         if (stored) {
-            try { return Object.keys(JSON.parse(stored)); } catch (e) { return []; }
+            try { 
+                const parsed = JSON.parse(stored);
+                // Backward compatibility check
+                if (!Array.isArray(parsed)) {
+                    return Object.keys(parsed); 
+                }
+                // Return unique array of course names
+                return [...new Set(parsed.map(c => c.name))];
+            } catch (e) { return []; }
         }
         return [];
     }
@@ -10,14 +18,17 @@
     function populateCourseSelector() {
         const courseSelect = document.getElementById('todo-course');
         if (!courseSelect) return;
+        
         courseSelect.innerHTML = '';
         const courses = getCoursesFromHome();
+        
         courses.forEach(c => {
             const o = document.createElement('option');
             o.value = c;
             o.textContent = c;
             courseSelect.appendChild(o);
         });
+        
         const genOpt = document.createElement('option');
         genOpt.value = 'General';
         genOpt.textContent = 'General';
@@ -46,9 +57,11 @@
 
     function updateCounters() {
         const totalEl = document.getElementById('total-counter');
-        if (!totalEl) return; // guard: only runs on todo_list.html
+        if (!totalEl) return; 
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
+        
         totalEl.textContent = todos.filter(t => !t.done).length;
         document.getElementById('completed-counter').textContent = todos.filter(t => t.done).length;
         document.getElementById('missed-counter').textContent = todos.filter(t => {
@@ -59,7 +72,7 @@
 
     function renderTodos() {
         const list = document.getElementById('todo-list');
-        if (!list) return; // guard: only runs on todo_list.html
+        if (!list) return; 
 
         let filtered = todos.filter(t => {
             if (activeFilter === 'all') return true;

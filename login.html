@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curricula // Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-card">
+        <div class="auth-logo">CURRICULA</div>
+        <div class="auth-subtitle">Welcome back! Please login to your account.</div>
+
+        <form class="auth-form" id="loginForm">
+            <label for="loginId">Student Number</label>
+            <input type="text" id="loginId" placeholder="e.g. 202412345" required>
+
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+
+            <button type="submit" class="auth-btn">Login</button>
+        </form>
+
+        <div class="auth-links">
+            Don't have an account? <a href="register.html">Register here</a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curricula // Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-card">
+        <div class="auth-logo">CURRICULA</div>
+        <div class="auth-subtitle">Create your account to get started.</div>
+
+        <form class="auth-form" id="registerForm">
+            <label for="regName">Name</label>
+            <input type="text" id="regName" placeholder="Juan Dela Cruz" required>
+
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="juan@example.com" required>
+
+            <label for="regId">Student Number</label>
+            <input type="text" id="regId" placeholder="e.g. 202412345" required>
+
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="Create a password" required>
+
+            <button type="submit" class="auth-btn">Create Account</button>
+        </form>
+
+        <div class="auth-links">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

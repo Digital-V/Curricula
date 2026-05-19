@@ -1,16 +1,15 @@
-(function() {
-    const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-    const TIMES = ['7:00–8:00','8:00–9:00','9:00–10:00','10:00–11:00','11:00–12:00','1:00–2:00','2:00–3:00','3:00–4:00','4:00–5:00','5:00–6:00','6:00–7:00'];
+(function () {
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const TIMES = ['7:00–8:00', '8:00–9:00', '9:00–10:00', '10:00–11:00', '11:00–12:00', '12:00–1:00', '1:00–2:00', '2:00–3:00', '3:00–4:00', '4:00–5:00', '5:00–6:00', '6:00–7:00'];
 
-    // Changed from an object {} to an array [] to allow duplicate course names
     let scheduleData = [];
+    let selectedCourseName = '';
 
     function loadScheduleData() {
         const saved = localStorage.getItem('scheduleData');
         if (saved) {
-            try { 
+            try {
                 const parsed = JSON.parse(saved);
-                // Convert old object-based data to the new array format for backward compatibility
                 if (!Array.isArray(parsed)) {
                     scheduleData = Object.keys(parsed).map(key => ({
                         name: key,
@@ -19,7 +18,9 @@
                 } else {
                     scheduleData = parsed;
                 }
-            } catch(e) { scheduleData = []; } // Reset to empty array on error
+            } catch (e) { 
+                scheduleData = []; 
+            }
         }
     }
 
@@ -27,7 +28,7 @@
 
     function buildSchedule() {
         const tbody = document.getElementById('sched-body');
-        if (!tbody) return; 
+        if (!tbody) return;
 
         tbody.innerHTML = '';
         const coveredCells = {};
@@ -44,7 +45,6 @@
                 if (coveredCells[cellKey]) return;
 
                 let found = null;
-                // Changed to iterate over the array instead of using Object.entries
                 for (const course of scheduleData) {
                     if (course.times.includes(t) && course.days.includes(di)) {
                         found = { name: course.name, info: course };
@@ -61,7 +61,7 @@
                         else break;
                     }
                     for (let i = 0; i < rowspan; i++) coveredCells[`${di}-${timeIndex + i}`] = true;
-                    td.innerHTML = `<span class="cell-block ${found.info.color}">${found.name}</span>`;
+                    td.innerHTML = `<span class="cell-block ${found.info.color}" onclick="openCourseDetailModal('${found.name}')" style="cursor: pointer;">${found.name}</span>`;
                     td.rowSpan = rowspan;
                 }
 
@@ -72,31 +72,34 @@
         });
     }
 
-    window.openAddModal = function() {
+    window.openAddModal = function () {
         document.getElementById('addModal').classList.add('show');
     };
 
-    window.closeAddModal = function() {
+    window.closeAddModal = function () {
         document.getElementById('addModal').classList.remove('show');
         document.getElementById('courseName').value = '';
         document.getElementById('courseTimeStart').value = '';
         document.getElementById('courseTimeEnd').value = '';
         Array.from(document.getElementById('courseDays').options).forEach(opt => opt.selected = false);
+        document.getElementById('courseRoom').value = '';
+        document.querySelectorAll('input[name="courseType"]').forEach(radio => radio.checked = false);
     };
 
-    window.saveAddCourse = function() {
+    window.saveAddCourse = function () {
         const courseName = document.getElementById('courseName').value.trim();
         const startTimeValue = document.getElementById('courseTimeStart').value;
         const endTimeValue = document.getElementById('courseTimeEnd').value;
         const courseDaysSelect = document.getElementById('courseDays');
-        const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value));
+        const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value, 10));
+        const courseType = document.querySelector('input[name="courseType"]:checked')?.value;
+        const courseRoom = document.getElementById('courseRoom').value.trim();
 
         if (!courseName || selectedDays.length === 0) {
             alert('Please enter a course name and select at least one day.');
             return;
         }
-        
-        // Filter the array to check for naming and day conflicts instead of relying on object keys
+
         const existingCourses = scheduleData.filter(c => c.name === courseName);
         if (existingCourses.length > 0) {
             const existingDays = existingCourses.flatMap(c => c.days);
@@ -107,38 +110,52 @@
                 if (!confirm(`"${courseName}" already exists on ${dayNames}. Add anyway?`)) return;
             }
         }
-        
+
         if (!startTimeValue || !endTimeValue) {
             alert('Please select both start and end times.');
             return;
         }
 
-        const convertTo12Hour = (timeStr) => {
-            const [hours] = timeStr.split(':').map(Number);
-            return hours % 12 || 12;
+        const parseInputTime = (timeStr) => {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours + (minutes / 60);
         };
 
-        const startHour12 = convertTo12Hour(startTimeValue);
-        const endHour12 = convertTo12Hour(endTimeValue);
+        const inputStart = parseInputTime(startTimeValue);
+        const inputEnd = parseInputTime(endTimeValue);
 
-        const matchedSlots = [];
-        for (const timeSlot of TIMES) {
-            const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
-            const slotStart = parseInt(startPart.split(':')[0]);
-            const slotEnd = parseInt(endPart.split(':')[0]);
-            if (slotStart >= startHour12 && slotEnd <= endHour12) matchedSlots.push(timeSlot);
-        }
-
-        if (matchedSlots.length === 0) {
-            alert('No matching time slots found. Please select from the available slots (7am-7pm).');
+        if (inputEnd <= inputStart) {
+            alert('End time must be after start time.');
             return;
         }
 
-        // Push the new course object into the array rather than assigning it to a key
+        const matchedSlots = [];
+
+        for (const timeSlot of TIMES) {
+            const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
+
+            let slotStart = parseInt(startPart.split(':')[0], 10);
+            let slotEnd = parseInt(endPart.split(':')[0], 10);
+
+            if (slotStart >= 1 && slotStart <= 6) slotStart += 12;
+            if (slotEnd >= 1 && slotEnd <= 7) slotEnd += 12;
+
+            if (slotStart < inputEnd && slotEnd > inputStart) {
+                matchedSlots.push(timeSlot);
+            }
+        }
+
+        if (matchedSlots.length === 0) {
+            alert('No matching time slots found. Please select from the available slots (7:00 AM - 7:00 PM).');
+            return;
+        }
+
         scheduleData.push({
             name: courseName,
             days: selectedDays,
             times: matchedSlots,
+            type: courseType,
+            room: courseRoom,
             color: Math.random() > 0.5 ? 'light' : ''
         });
 
@@ -147,18 +164,68 @@
         window.closeAddModal();
     };
 
-    window.clearAllCourses = function() {
+    window.openCourseDetailModal = function (courseName) {
+        selectedCourseName = courseName;
+        const course = scheduleData.find(c => c.name === courseName);
+
+        if (!course) return;
+
+        document.getElementById('courseDetailName').textContent = courseName;
+        document.getElementById('courseDetailType').textContent = course.type ? course.type.toUpperCase() : 'N/A';
+        document.getElementById('courseDetailRoom').textContent = course.room || '—';
+
+        const dayNames = course.days.map(d => DAYS[d]).join(', ');
+        document.getElementById('courseDetailDays').textContent = dayNames;
+
+        let formattedTime = '';
+        if (course.times && course.times.length > 0) {
+            const firstSlot = course.times[0];
+            const lastSlot = course.times[course.times.length - 1];
+            
+            const formatWithAMPM = (timeStr) => {
+                const hour = parseInt(timeStr.split(':')[0], 10);
+                if (hour >= 7 && hour <= 11) return `${timeStr} AM`;
+                if (hour === 12) return `${timeStr} PM`;
+                return `${timeStr} PM`;
+            };
+
+            const startTime = formatWithAMPM(firstSlot.split('\u2013')[0].trim());
+            const endTime = formatWithAMPM(lastSlot.split('\u2013')[1].trim());
+            
+            formattedTime = `${startTime} – ${endTime}`;
+        }
+
+        document.getElementById('courseDetailTimes').textContent = formattedTime;
+        document.getElementById('courseDetailModal').classList.add('show');
+    };
+
+    window.closeCourseDetailModal = function () {
+        document.getElementById('courseDetailModal').classList.remove('show');
+        selectedCourseName = '';
+    };
+
+    window.deleteCourse = function () {
+        if (confirm(`Delete course "${selectedCourseName}"?`)) {
+            scheduleData = scheduleData.filter(c => c.name !== selectedCourseName);
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+            buildSchedule();
+            window.closeCourseDetailModal();
+        }
+    };
+
+    window.clearAllCourses = function () {
         if (confirm('Are you sure you want to delete ALL courses? This cannot be undone.')) {
-            // Reset to an empty array instead of an empty object
-            scheduleData = []; 
+            scheduleData = [];
             localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
             buildSchedule();
         }
     };
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const modal = document.getElementById('addModal');
+        const detailModal = document.getElementById('courseDetailModal');
         if (modal && event.target === modal) window.closeAddModal();
+        if (detailModal && event.target === detailModal) window.closeCourseDetailModal();
     };
 
     buildSchedule();

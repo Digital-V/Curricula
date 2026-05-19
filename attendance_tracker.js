@@ -1,6 +1,4 @@
 (function() {
-    const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-
     let attState = {};
 
     function getCurrentMonthDays() {
@@ -14,48 +12,59 @@
     function getCoursesFromHome() {
         const stored = localStorage.getItem('scheduleData');
         if (stored) {
-            try { return JSON.parse(stored); } catch(e) { return {}; }
+            try { 
+                const parsed = JSON.parse(stored);
+                // Handle backwards compatibility if the data hasn't been migrated to array yet
+                if (!Array.isArray(parsed)) {
+                    return Object.keys(parsed).map(key => ({ name: key, ...parsed[key] }));
+                }
+                return parsed;
+            } catch(e) { return []; }
         }
-        return {};
+        return [];
     }
 
     function initializeAttendance() {
         const scheduleData = getCoursesFromHome();
-        const courses = Object.keys(scheduleData);
+        
+        // Extract unique course names since scheduleData is now an array
+        const uniqueCourses = [...new Set(scheduleData.map(c => c.name))];
+        
         const monthDays = getCurrentMonthDays();
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
 
         attState = {};
-        courses.forEach(c => {
-            attState[c] = {};
-            const info = scheduleData[c];
-            if (!info || !Array.isArray(info.days)) return;
+        uniqueCourses.forEach(courseName => {
+            attState[courseName] = {};
+            
+            // Gather all days this specific course occurs
+            const instances = scheduleData.filter(c => c.name === courseName);
+            const allDaysForCourse = instances.flatMap(c => c.days);
 
             monthDays.forEach(d => {
                 const date = new Date(year, month, d);
-                const dow = date.getDay();   // 0=Sun,1=Mon,...,6=Sat
-                const mapped = dow - 1;      // Mon=0, Tue=1, ..., Fri=4, Sun=-1, Sat=5
+                const dow = date.getDay();   
+                const mapped = dow - 1;     
 
-                attState[c][d] = info.days.includes(mapped) ? 'present' : 'no-class';
+                attState[courseName][d] = allDaysForCourse.includes(mapped) ? 'present' : 'no-class';
             });
         });
     }
 
     function buildAttendance() {
         const container = document.getElementById('att-courses');
-        if (!container) return; // guard: only runs on attendance_tracker.html
+        if (!container) return; 
 
-        const scheduleData = getCoursesFromHome();
-        const courses = Object.keys(scheduleData);
+        const courses = Object.keys(attState);
         const monthDays = getCurrentMonthDays();
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
 
         if (courses.length === 0) {
-            container.innerHTML = '<div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; color:#5a8a6a; font-size:12px; padding:20px; min-height: 100px;">No courses added yet. Add courses from the Daily Schedule.</div>';
+            container.innerHTML = '<div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; color:#5a8a6a; font-size:14px; padding:20px; min-height: 100px;">No courses added yet. Add courses from the Weekly Schedule.</div>';
             return;
         }
 
@@ -94,7 +103,6 @@
         });
     }
 
-    // Expose toggleAtt globally so inline onclick handlers can reach it
     window.toggleAtt = function(course, day) {
         const s = attState[course][day];
         attState[course][day] = s === 'present' ? 'absent' : 'present';
