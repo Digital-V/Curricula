@@ -25,12 +25,15 @@ header{
     background-color: #005201;
     margin: 10px 20px 15px 20px;
     height: 70px;
-    transition: height 0.35s ease, padding 0.25s ease;
+    transition: height 0.35s ease, padding 0.25s ease, margin-bottom 0.35x ease;
     overflow: hidden;
+    position: relative;
+    z-index: 100;
 }
 
 header.expanded {
     height: 820px;
+    margin-bottom: -750px;
 }
 
 .header-top {
