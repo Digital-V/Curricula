@@ -159,3 +159,11 @@ window.onclick = function(event) {
 }
 
 buildSchedule();
+
+function openPersonalInfo() {
+    document.getElementById('personalInfoModal').classList.add('show');
+}
+
+function closePersonalInfo() {
+    document.getElementById('personalInfoModal').classList.remove('show');
+}
