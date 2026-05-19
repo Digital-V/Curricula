@@ -7,9 +7,68 @@
     </head>
     <body>
         <header>
-            <img src="Caleb ID.jpg">
-            <h3>Dela Cruz, Juan A. | 2510123456</h3>
-            <h2>Student</h2>
+            <div class="header-top">
+                <img class="profile-img" src="" alt="Profile Image">    
+                <h3></h3>
+                <h2></h2>
+            </div>
+            <div id="personalInfoPanel">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Personal Information</span>
+                    </div>
+                    <div class="personal-panel-layout">
+                        <div class="personal-photo-box">
+                            <div class="personal_img_upload">
+                                <label for="profileImageInput" class="personal-preview-wrap" aria-label="Change profile image">
+                                    <img id="personalPreview" class="personal-preview" src="" alt="Profile preview">
+                                    <span class="personal-preview-hint">+</span>
+                                </label>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+
+                        <div class="personal-form-box">
+                            <div class="modal-form">
+                                <label>Name: </label>
+                                <input type="text" id="personalName">
+
+                                <label>Student Number: </label>
+                                <input type="text" id="personalStudentId">
+
+                                <label>Email: </label>
+                                <input type="email" id="personalEmail">
+
+                                <label>Contact Number: </label>
+                                <input type="tel" id="personalContact">
+
+                                <label>Program: </label>
+                                <input type="text" id="personalCourse">
+
+                                <div class="two-col">
+                                        <div class="col">
+                                            <label>Year Level: </label>
+                                            <input type="number" id="personalYearLevel" min="1" max="7" step="1">
+                                        </div>
+                                    <div class="col">
+                                        <label>Section: </label>
+                                        <input type="text" id="personalSection">
+                                    </div>
+                                </div>
+
+                                <label>Status: </label>
+                                <select id="personalStatus">
+                                    <option value="enrolled">Enrolled</option>
+                                    <option value="irregular">Irregular</option>
+                                </select>
+
+                                <button class="personalinfo-btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </header>
         <div id="grid">
             <div class="sidebar">
@@ -61,144 +120,9 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            function getCoursesFromHome() {
-                const stored = localStorage.getItem('scheduleData');
-                if (stored) {
-                    try {
-                        return Object.keys(JSON.parse(stored));
-                    } catch (e) {
-                        return [];
-                    }
-                }
-                return [];
-            }
-
-            function populateCourseSelector() {
-                const courseSelect = document.getElementById('todo-course');
-                if (!courseSelect) return;
-                courseSelect.innerHTML = '';
-                const courses = getCoursesFromHome();
-                courses.forEach(c => {
-                    const o = document.createElement('option'); 
-                    o.value = c; 
-                    o.textContent = c;
-                    courseSelect.appendChild(o);
-                });
-                const genOpt = document.createElement('option'); 
-                genOpt.value = 'General'; 
-                genOpt.textContent = 'General'; 
-                courseSelect.appendChild(genOpt);
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', populateCourseSelector);
-            } else {
-                populateCourseSelector();
-            }
-
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    populateCourseSelector();
-                }
-            });
-
-            let todos = [];
-            let todoIdCounter = 1;
-            let activeFilter = 'all';
-
-            function formatDue(d) {
-                if(!d) return '';
-                const [y,m,day] = d.split('-');
-                return `${m}/${day}/${y}`;
-            }
-
-            function updateCounters() {
-                const totalCount = todos.filter(t => !t.done).length;
-                const completedCount = todos.filter(t => t.done).length;
-                
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const missedCount = todos.filter(t => {
-                    if (t.done) return false;
-                    if (!t.due) return false;
-                    const dueDate = new Date(t.due);
-                    return dueDate < today;
-                }).length;
-                
-                document.getElementById('total-counter').textContent = totalCount;
-                document.getElementById('completed-counter').textContent = completedCount;
-                document.getElementById('missed-counter').textContent = missedCount;
-            }
-
-            function renderTodos() {
-                const list = document.getElementById('todo-list');
-                let filtered = todos.filter(t => {
-                    if(activeFilter === 'all') return true;
-                    if(activeFilter === 'pending') return !t.done;
-                    return t.priority === activeFilter;
-                });
-                list.innerHTML = '';
-                if(!filtered.length) { 
-                    list.innerHTML = '<div style="text-align:center;color:#5a8a6a;font-size:15px;padding:20px">No tasks here.</div>'; 
-                    updateCounters();
-                    return; 
-                }
-                filtered.forEach(t => {
-                    const el = document.createElement('div');
-                    el.className = `todo-item ${t.priority}`;
-                    el.innerHTML = `
-                        <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})"></div>
-                        <div class="todo-info">
-                            <span class="todo-text ${t.done?'done':''}">${t.text}</span>
-                            <div class="todo-meta">
-                                <span class="todo-badge badge-${t.priority}">${t.priority.charAt(0).toUpperCase()+t.priority.slice(1)}</span>
-                                <span class="todo-badge badge-course">${t.course}</span>
-                                ${t.due ? `<span class="todo-badge badge-due">📅 ${formatDue(t.due)}</span>` : ''}
-                            </div>
-                        </div>
-                        <button class="todo-delete" onclick="deleteTodo(${t.id})" title="Delete task">✕</button>`;
-                    list.appendChild(el);
-                });
-                updateCounters();
-            }
-            renderTodos();
-
-            function addTodo() {
-                const text = document.getElementById('todo-text').value.trim();
-                if(!text) return;
-                todos.unshift({
-                    id: todoIdCounter++,
-                    text,
-                    priority: document.getElementById('todo-priority').value,
-                    course: document.getElementById('todo-course').value,
-                    due: document.getElementById('todo-due').value,
-                    done: false,
-                });
-                document.getElementById('todo-text').value = '';
-                document.getElementById('todo-due').value = '';
-                renderTodos();
-            }
-
-            function toggleTodo(id) { 
-                const t = todos.find(x=>x.id===id); 
-                if(t) t.done=!t.done; 
-                renderTodos(); 
-            }
-
-            function deleteTodo(id) { 
-                todos = todos.filter(x=>x.id!==id); 
-                renderTodos(); 
-            }
-
-            function filterTodo(f, btn) {
-                activeFilter = f;
-                document.querySelectorAll('.todo-filter-btn').forEach(b=>b.classList.remove('active'));
-                btn.classList.add('active');
-                renderTodos();
-            }
-        </script>
-        
+    <script src="personalinfo.js"></script>
+    <script src="home.js"></script>
+    <script src="attendance_tracker.js"></script>
+    <script src="todo_list.js"></script>     
     </body>
 </html>

@@ -7,13 +7,73 @@
     </head>
     <body>
         <header>
-            <img src="Caleb ID.jpg">
-            <h3>Dela Cruz, Juan A. | 2510123456</h3>
-            <h2>Student</h2>
+            <div class="header-top">
+                <img class="profile-img" src="" alt="Profile Image">    
+                <h3></h3>
+                <h2></h2>
+            </div>
+            <div id="personalInfoPanel">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Personal Information</span>
+                    </div>
+                    <div class="personal-panel-layout">
+                        <div class="personal-photo-box">
+                            <div class="personal_img_upload">
+                                <label for="profileImageInput" class="personal-preview-wrap" aria-label="Change profile image">
+                                    <img id="personalPreview" class="personal-preview" src="" alt="Profile preview">
+                                    <span class="personal-preview-hint">+</span>
+                                </label>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+
+                        <div class="personal-form-box">
+                            <div class="modal-form">
+                                <label>Name: </label>
+                                <input type="text" id="personalName">
+
+                                <label>Student Number: </label>
+                                <input type="text" id="personalStudentId">
+
+                                <label>Email: </label>
+                                <input type="email" id="personalEmail">
+
+                                <label>Contact Number: </label>
+                                <input type="tel" id="personalContact">
+
+                                <label>Program: </label>
+                                <input type="text" id="personalCourse">
+
+                                <div class="two-col">
+                                        <div class="col">
+                                            <label>Year Level: </label>
+                                            <input type="number" id="personalYearLevel" min="1" max="7" step="1">
+                                        </div>
+                                    <div class="col">
+                                        <label>Section: </label>
+                                        <input type="text" id="personalSection">
+                                    </div>
+                                </div>
+
+                                <label>Status: </label>
+                                <select id="personalStatus">
+                                    <option value="enrolled">Enrolled</option>
+                                    <option value="irregular">Irregular</option>
+                                </select>
+
+                                <button class="personalinfo-btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </header>
+
         <div id="grid">
             <div class="sidebar">
-                <button onclick="window.location.href='home.html'">Daily Schedule</button>
+                <button onclick="window.location.href='home.html'">Weekly Schedule</button>
                 <button class="active" onclick="alert('Attendance Tracker')">Attendance Tracker</button>
                 <button onclick="window.location.href='todo_list.html'">To-Do List</button>
                 <button onclick="window.location.href='gwa_calculator.html'">GWA Calculator</button>
@@ -27,108 +87,10 @@
                 </div>
                 <div id="att-courses"></div>
             </div>
-        </div>
-
-        <script>
-            const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-
-            let attState = {};
-
-            function getCoursesFromHome() {
-                const stored = localStorage.getItem('scheduleData');
-                if (stored) {
-                    return JSON.parse(stored);
-                }
-                return {};
-            }
-
-            function initializeAttendance() {
-                const scheduleData = getCoursesFromHome();
-                const courses = Object.keys(scheduleData);
-                const MAY_DAYS = Array.from({length:31}, (_,i) => i+1);
-
-                attState = {};
-                courses.forEach(c => {
-                    attState[c] = {};
-                    const info = scheduleData[c];
-                    if (!info || !Array.isArray(info.days)) return;
-                    
-                    MAY_DAYS.forEach(d => {
-                        const date = new Date(2025, 4, d);
-                        const dow = date.getDay();
-                        const mapped = dow - 1;
-                        
-                        if (info.days.includes(mapped)) {
-                            attState[c][d] = 'present';
-                        } else {
-                            attState[c][d] = 'no-class';
-                        }
-                    });
-                });
-            }
-
-            function buildAttendance() {
-                const scheduleData = getCoursesFromHome();
-                const courses = Object.keys(scheduleData);
-                const MAY_DAYS = Array.from({length:31}, (_,i) => i+1);
-                
-                if (courses.length === 0) {
-                    document.getElementById('att-courses').innerHTML = '<div style="text-align:center;color:#5a8a6a;font-size:12px;padding:20px">No courses added yet. Add courses from the Daily Schedule.</div>';
-                    return;
-                }
-
-                const container = document.getElementById('att-courses');
-                container.innerHTML = '';
-                courses.forEach(course => {
-                    const states = attState[course];
-                    const classDays = MAY_DAYS.filter(d => states[d] !== 'no-class' && states[d] !== 'future');
-                    const present = classDays.filter(d => states[d] === 'present').length;
-                    const total = classDays.length;
-
-                    const block = document.createElement('div');
-                    block.className = 'att-course-block';
-                    block.innerHTML = `
-                        <div class="att-course-header">
-                            <span class="att-course-name">${course}</span>
-                            <span class="att-stat">${present}/${total} present (${total ? Math.round(present/total*100) : 0}%)</span>
-                        </div>
-                        <div class="att-cal-grid">
-                            ${['S','M','T','W','T','F','S'].map(d=>`<div class="att-day-label">${d}</div>`).join('')}
-                            ${(() => {
-                                const firstDow = new Date(2025,4,1).getDay();
-                                let cells = '';
-                                for(let i=0;i<firstDow;i++) cells += `<div class="att-cell no-class"></div>`;
-                                MAY_DAYS.forEach(d => {
-                                    const s = states[d];
-                                    const cls = s === 'no-class' ? 'no-class' : s === 'future' ? '' : s;
-                                    const clickable = s !== 'no-class' && s !== 'future';
-                                    cells += `<div class="att-cell ${cls}" ${clickable ? `onclick="toggleAtt('${course}',${d})"` : ''} title="${clickable ? 'Click to toggle' : ''}">
-                                        <span>${d}</span>
-                                    </div>`;
-                                });
-                                return cells;
-                            })()}
-                        </div>`;
-                    container.appendChild(block);
-                });
-            }
-
-            function toggleAtt(course, day) {
-                const s = attState[course][day];
-                attState[course][day] = s === 'present' ? 'absent' : 'present';
-                buildAttendance();
-            }
-
-            initializeAttendance();
-            buildAttendance();
-
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    initializeAttendance();
-                    buildAttendance();
-                }
-            });
-        </script>
-        
+        </div> 
+    <script src="personalinfo.js"></script>
+    <script src="home.js"></script>
+    <script src="attendance_tracker.js"></script>
+    <script src="todo_list.js"></script>             
     </body>
 </html>
