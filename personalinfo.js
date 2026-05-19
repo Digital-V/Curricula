@@ -71,6 +71,23 @@ function savePersonalInfo() {
     closePersonalInfo();
 }
 
+function clearPersonalInfo() {
+    document.getElementById('personalName').value = '';
+    document.getElementById('personalStudentId').value = '';
+    document.getElementById('personalEmail').value = '';
+    document.getElementById('personalContact').value = '';
+    document.getElementById('personalCourse').value = '';
+    document.getElementById('personalYearLevel').value = '';
+    document.getElementById('personalSection').value = '';
+    document.getElementById('personalStatus').value = 'undeclared';
+    
+    const placeholderSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s';
+    const preview = document.getElementById('personalPreview');
+    const headerImg = document.querySelector('.profile-img');
+    if (preview) preview.src = placeholderSrc;
+    if (headerImg) headerImg.src = placeholderSrc;
+}
+
 function loadPersonalInfo() {
     const headerName = document.querySelector('header h3');
     const headerStatus = document.querySelector('header h2');
