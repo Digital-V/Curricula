@@ -2,6 +2,14 @@
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
 
+    if (!loginForm && !registerForm) {
+        const session = localStorage.getItem('sessionUser');
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+    }
+
     if (loginForm) {
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -14,22 +22,21 @@
                 return;
             }
 
-            let storedInfo = JSON.parse(localStorage.getItem('personalInfo') || '{}');
+            const storedCredentials = JSON.parse(localStorage.getItem('registeredUser') || 'null');
 
-            if (storedInfo.studentId !== studentId) {
-                storedInfo.studentId = studentId;
-
-                if (!storedInfo.name) {
-                    storedInfo.name = "Student";
-                }
-                if (!storedInfo.status) {
-                    storedInfo.status = "enrolled";
-                }
-
-                localStorage.setItem('personalInfo', JSON.stringify(storedInfo));
+            if (!storedCredentials) {
+                alert("No account found. Please register first.");
+                return;
             }
 
-            //no database so pass either way :)))
+            if (storedCredentials.studentId !== studentId || storedCredentials.password !== password) {
+                alert("Incorrect Student Number or Password.");
+                return;
+            }
+
+            // Set a lightweight session marker (not the password)
+            localStorage.setItem('sessionUser', JSON.stringify({ studentId }));
+
             alert("Login successful! Redirecting to Dashboard...");
             window.location.href = 'home.html';
         });
@@ -49,13 +56,15 @@
                 return;
             }
 
+            // Store credentials separately from personal info
+            localStorage.setItem('registeredUser', JSON.stringify({ studentId, password }));
+
             const initialInfo = {
                 name: name,
                 email: email,
                 studentId: studentId,
                 status: 'enrolled'
             };
-
             localStorage.setItem('personalInfo', JSON.stringify(initialInfo));
 
             alert("Account created successfully! Please login.");

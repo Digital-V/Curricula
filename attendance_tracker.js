@@ -23,6 +23,28 @@
         return [];
     }
 
+    function getAttKey() {
+        const now = new Date();
+        return `attState_${now.getFullYear()}_${now.getMonth()}`;
+    }
+
+    function saveAttState() {
+        try {
+            localStorage.setItem(getAttKey(), JSON.stringify(attState));
+        } catch(e) {
+            console.warn('Could not save attendance state', e);
+        }
+    }
+
+    function loadAttState() {
+        try {
+            const saved = localStorage.getItem(getAttKey());
+            return saved ? JSON.parse(saved) : null;
+        } catch(e) {
+            return null;
+        }
+    }
+
     function initializeAttendance() {
         const scheduleData = getCoursesFromHome();
         const uniqueCourses = [...new Set(scheduleData.map(c => c.name))];
@@ -31,6 +53,9 @@
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
+
+        // Load previously saved toggles so manual changes survive page reloads
+        const savedState = loadAttState();
 
         attState = {};
         uniqueCourses.forEach(courseName => {
@@ -41,10 +66,21 @@
 
             monthDays.forEach(d => {
                 const date = new Date(year, month, d);
-                const dow = date.getDay();   
-                const mapped = dow - 1;     
+                const dow = date.getDay();
+                // dow: 0=Sun,1=Mon...6=Sat; course days: 0=Mon...5=Sat
+                const mapped = dow === 0 ? -1 : dow - 1;
 
-                attState[courseName][d] = allDaysForCourse.includes(mapped) ? 'present' : 'no-class';
+                const isClassDay = allDaysForCourse.includes(mapped);
+                const defaultState = isClassDay ? 'present' : 'no-class';
+
+                // Preserve any saved toggle for this course+day, but only if
+                // the day is still a class day (don't restore stale no-class saves)
+                if (savedState && savedState[courseName] && isClassDay &&
+                    (savedState[courseName][d] === 'present' || savedState[courseName][d] === 'absent')) {
+                    attState[courseName][d] = savedState[courseName][d];
+                } else {
+                    attState[courseName][d] = defaultState;
+                }
             });
         });
     }
@@ -102,6 +138,7 @@
     window.toggleAtt = function(course, day) {
         const s = attState[course][day];
         attState[course][day] = s === 'present' ? 'absent' : 'present';
+        saveAttState();
         buildAttendance();
     };
 

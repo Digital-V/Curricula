@@ -53,6 +53,29 @@
     let todoIdCounter = 1;
     let activeFilter = 'all';
 
+    function saveTodos() {
+        try {
+            localStorage.setItem('todosData', JSON.stringify({ todos, todoIdCounter }));
+        } catch(e) {
+            console.warn('Could not save todos', e);
+        }
+    }
+
+    function loadTodos() {
+        try {
+            const saved = localStorage.getItem('todosData');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                todos = parsed.todos || [];
+                todoIdCounter = parsed.todoIdCounter || todos.length + 1;
+            }
+        } catch(e) {
+            todos = [];
+        }
+    }
+
+    loadTodos();
+
     function formatDue(d) {
         if (!d) return '';
         const [y, m, day] = d.split('-');
@@ -125,17 +148,20 @@
         });
         document.getElementById('todo-text').value = '';
         document.getElementById('todo-due').value = '';
+        saveTodos();
         renderTodos();
     };
 
     window.toggleTodo = function (id) {
         const t = todos.find(x => x.id === id);
         if (t) t.done = !t.done;
+        saveTodos();
         renderTodos();
     };
 
     window.deleteTodo = function (id) {
         todos = todos.filter(x => x.id !== id);
+        saveTodos();
         renderTodos();
     };
 
