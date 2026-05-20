@@ -1100,7 +1100,7 @@ table.sched-table {
    ============================================= */
 
 .auth-body {
-    background-color: #ddf2df;
+    background-color: #91c691;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1112,7 +1112,7 @@ table.sched-table {
     background-color: white;
     padding: 40px;
     border-radius: 30px;
-    box-shadow: 0 10px 30px rgba(0, 82, 1, 0.1);
+    box-shadow: 0 10px 30px grey;
     width: 100%;
     max-width: 450px;
     text-align: center;
