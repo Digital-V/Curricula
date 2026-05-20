@@ -34,7 +34,6 @@
                 return;
             }
 
-            // Set a lightweight session marker (not the password)
             localStorage.setItem('sessionUser', JSON.stringify({ studentId }));
 
             alert("Login successful! Redirecting to Dashboard...");
@@ -55,8 +54,7 @@
                 alert("Please fill out all fields.");
                 return;
             }
-
-            // Store credentials separately from personal info
+            
             localStorage.setItem('registeredUser', JSON.stringify({ studentId, password }));
 
             const initialInfo = {

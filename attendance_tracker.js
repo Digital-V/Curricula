@@ -53,8 +53,6 @@
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
-
-        // Load previously saved toggles so manual changes survive page reloads
         const savedState = loadAttState();
 
         attState = {};
@@ -67,14 +65,11 @@
             monthDays.forEach(d => {
                 const date = new Date(year, month, d);
                 const dow = date.getDay();
-                // dow: 0=Sun,1=Mon...6=Sat; course days: 0=Mon...5=Sat
                 const mapped = dow === 0 ? -1 : dow - 1;
 
                 const isClassDay = allDaysForCourse.includes(mapped);
                 const defaultState = isClassDay ? 'present' : 'no-class';
 
-                // Preserve any saved toggle for this course+day, but only if
-                // the day is still a class day (don't restore stale no-class saves)
                 if (savedState && savedState[courseName] && isClassDay &&
                     (savedState[courseName][d] === 'present' || savedState[courseName][d] === 'absent')) {
                     attState[courseName][d] = savedState[courseName][d];
