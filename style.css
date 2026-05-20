@@ -1202,3 +1202,40 @@ table.sched-table {
 .auth-links a:hover {
     color: #91c691;
 }
+
+.todo-add-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23005201'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 18px;
+    padding-right: 40px; 
+    cursor: pointer;
+}
+
+.todo-add-form select option {
+    background-color: #ddf2df;
+    color: #005201;
+    font-weight: 600;
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: #ddf2df;
+    border: 2px solid #ddf2df;
+    padding: 8px 24px;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 20px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.logout-btn:hover {
+    background-color: #ddf2df;
+    color: #005201;
+}
