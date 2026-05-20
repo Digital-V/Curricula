@@ -66,7 +66,8 @@ function savePersonalInfo() {
         headerName.textContent = info.studentId ? `${displayName} | ${info.studentId}` : displayName;
     }
     if (headerStatus) {
-        headerStatus.textContent = capitalizeFirst(info.status || 'Enrollment Status');
+        const statusLabel = info.status == 'enrolled' ? 'regular' : info.status == 'irregular' ? 'Irregular' : 'Enrollment Status';
+        headerStatus.textContent = statusLabel;
     }
     closePersonalInfo();
 }
@@ -144,9 +145,10 @@ function loadPersonalInfo() {
             headerName.textContent = info.studentId ? `${displayName} | ${info.studentId}` : displayName;
         }
 
-        if (headerStatus) {
-            headerStatus.textContent = capitalizeFirst(info.status || 'Enrollment Status');
-        }
+    if (headerStatus) {
+        const statusLabel = info.status === 'enrolled' ? 'Regular' : info.status === 'irregular' ? 'Irregular' : 'Enrollment Status';
+        headerStatus.textContent = statusLabel;
+    }
     } catch (error) {
         console.warn('Unable to load personal info', error);
     }
