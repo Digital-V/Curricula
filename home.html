@@ -80,7 +80,7 @@
                 <button class="active" onclick="alert('Weekly Schedule')">Weekly Schedule</button>
                 <button onclick="window.location.href='attendance_tracker.html'">Attendance Tracker</button>
                 <button onclick="window.location.href='todo_list.html'">To-Do List</button>
-                <button onclick="window.location.href='gwa_calculator.html'">GWA Calculator</button>
+                <button onclick="window.location.href='gwa-calculator.html'">GWA Calculator</button>
             </div>
             <div class="maintab">
                 <div class="schedule-header">
@@ -115,6 +115,9 @@
                     <div class="modal-form">
                         <label>Course Name</label>
                         <input type="text" id="courseName" placeholder="e.g., Math 101">
+
+                        <label>Units</label>
+                        <input type="number" id="courseUnits" min="1" max="6" step="1" placeholder="example: 3"> <!-- max unit is 6 ata? -->
                         
                         <label>Start Time</label>
                         <input type="time" id="courseTimeStart">
@@ -130,6 +133,18 @@
                             <option value="3">Thursday</option>
                             <option value="4">Friday</option>
                             <option value="5">Saturday</option>
+                        </select>
+
+                        <label>Semester</label> <!-- add a semester in the form -->
+                        <select id="courseSemester">
+                            <option value="1-1">1st Year - 1st Sem</option>
+                            <option value="1-2">1st Year - 2nd Sem</option>
+                            <option value="2-1">2nd Year - 1st Sem</option>
+                            <option value="2-2">2nd Year - 2nd Sem</option>
+                            <option value="3-1">3rd Year - 1st Sem</option>
+                            <option value="3-2">3rd Year - 2nd Sem</option>
+                            <option value="4-1">4th Year - 1st Sem</option>
+                            <option value="4-2">4th Year - 2nd Sem</option>
                         </select>
 
                         <label>Course Type</label>

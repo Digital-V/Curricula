@@ -69,7 +69,8 @@ header img {
   padding: 20px;
 }
 
-#grid {
+#grid,
+.grid {
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 0;
@@ -305,6 +306,7 @@ table.sched-table {
   display: flex;
   flex-direction: column;
 }
+
 .modal-form label {
   font-weight: 600;
   color: #005201;
@@ -395,6 +397,7 @@ table.sched-table {
 .modal-btn-secondary.clear:hover {
   background-color: #c62828;
 }
+
 /* =============================================
    headers sa lahat ng pages, pati na rin yung personal info panel sa header
    ============================================= */
@@ -517,6 +520,7 @@ header.expanded #personalInfoPanel {
   object-fit: cover;
   background: #f0f0f0;
 }
+
 /* =============================================
    HOME.HTML — WEEKLY SCHEDULE
    ============================================= */
@@ -1024,9 +1028,11 @@ table.sched-table {
 .todo-item.high {
   border-left-color: #e57373;
 }
+
 .todo-item.medium {
   border-left-color: #ffb74d;
 }
+
 .todo-item.low {
   border-left-color: #81c784;
 }
@@ -1093,18 +1099,22 @@ table.sched-table {
   background: #ffcdd2;
   color: #c62828;
 }
+
 .badge-medium {
   background: #ffe0b2;
   color: #e65100;
 }
+
 .badge-low {
   background: #c8e6c9;
   color: #2e7d32;
 }
+
 .badge-course {
   background: rgba(0, 82, 1, 0.15);
   color: #005201;
 }
+
 .badge-due {
   background: rgba(0, 0, 0, 0.06);
   color: #5a8a6a;
@@ -1328,4 +1338,149 @@ table.sched-table {
   color: #005201;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* for gwa-calculator */ 
+#grid,
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    gap: 0;
+    min-height: 900px;
+    align-items: stretch;
+    transition: opacity 0.35s ease;
+}
+
+.gwa-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 0 20px;
+    margin-bottom: 16px;
+}
+
+.gwa-title {
+    font-size: 30px;
+    font-weight: 1000;
+    color: #005201;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.gwa-subtitle {
+    font-size: 14px;
+    color: #5a8a6a;
+    font-weight: 600;
+}
+
+.gwa-overall {
+    background: #005201;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 20px 20px 20px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.gwa-label {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #e5f3e7;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.gwa-description,
+.gwa-desc {
+    font-size: 14px;
+    color: #c8e6c9;
+    font-weight: 600;
+}
+
+.gwa-value {
+    font-size: 32px;
+    font-weight: 1000;
+    color: white;
+    font-family: "Space Grotesk", sans-serif;
+}
+
+.semester-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 20px 20px 20px;
+}
+
+.gwa-semester {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.gwa-semester-title,
+.gwa-sem-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #005201;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+}
+
+.gwa-subject-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gwa-subject-row {
+    display: grid;
+    grid-template-columns: 1.6fr 0.7fr 0.7fr;
+    gap: 10px;
+    background: rgba(0, 82, 1, 0.06);
+    border-radius: 12px;
+    padding: 10px 12px;
+    align-items: center;
+}
+
+.gwa-subject-code,
+.gwa-subject-name,
+.gwa-subject-units,
+.gwa-subject-grade {
+    font-size: 14px;
+    font-weight: 600;
+    color: #005201;
+}
+
+.gwa-subject-units,
+.gwa-subject-grade {
+    text-align: right;
+}
+
+.gwa-empty {
+    margin: 0 20px 20px 20px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    color: #5a8a6a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.gwa-sem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.gwa-sem-gwa {
+    font-weight: 700;
+    color: #005201;
 }

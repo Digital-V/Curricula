@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GWA Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+
+<body>
+    <header>
+        <div class="header-top">
+            <img class="profile-img" src="" alt="Profile Image">
+            <h3></h3>
+            <h2></h2>
+        </div>
+    </header>
+    <div class="grid">
+        <div class="sidebar">
+            <button onclick="window.location.href='home.html'">Weekly Schedule</button>
+            <button onclick="window.location.href='attendance_tracker.html'">Attendance Tracker</button>
+            <button onclick="window.location.href='todo_list.html'">To-Do List</button>
+            <button class="active" onclick="alert('GWA Calculator')">GWA Calculator</button>
+        </div>
+
+        <div class="maintab">
+            <div class="gwa-header">
+                <div>
+                    <div class="gwa-title">GWA Calculator</div>
+                    <div class="gwa-subtitle">Subjects</div>
+                </div>
+            </div>
+
+            <div class="gwa-overall">
+                <div><!--div for gwa label-->
+                    <div class="gwa-label">Cumulative GWA</div>
+                    <!-- the gwa-description will update based on grades inputed (summa, magna, cumlaude or not)-->
+                    <div class="gwa-description" id="honor-description">Add grades to see honors status.</div>
+                </div>
+                <div class="gwa-value" id="overall-gwa-value">--</div>
+            </div>
+
+            <!-- let's create an empty placeholder for semester card, then fill it with subject card using js-->
+            <div class="semester-list" id="semester-list"></div>
+            <div id="gwa-empty" class="gwa-empty" style="display:none;">No subject yet.</div>
+            <!-- the display:none hides this container. If there are no subject to show we use js to show it using display: block-->
+
+        </div>
+
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="personalinfo.js"></script>
+    <script>
+        // function: read subject, render them, compute GWA, show/hide empty state.
+
+        // 1. grab gthe key elements
+        const semesterList = document.getElementById("semester-list");
+        const overallGWA = document.getElementById("overall-gwa-value");
+        const honorDescription = document.getElementById("honor-description");
+        const emptyGwa = document.getElementById("gwa-empty");
+
+        //2. add subjects from the schedule page into GWA:
+
+        const SEMESTERS = [
+            { id: "1-1", label: "1st Year - 1st Sem" },
+            { id: "1-2", label: "1st Year - 2nd Sem" },
+            { id: "2-1", label: "2nd Year - 1st Sem" },
+            { id: "2-2", label: "2nd Year - 2nd Sem" },
+            { id: "3-1", label: "3rd Year - 1st Sem" },
+            { id: "3-2", label: "3rd Year - 2nd Sem" },
+            { id: "4-1", label: "4th Year - 1st Sem" },
+            { id: "4-2", label: "4th Year - 2nd Sem" }
+        ];
+
+        function getSemesterLabel(semId) {
+            const match = SEMESTERS.find((s) => s.id === semId);
+            return match ? match.label : semId;
+        }
+
+
+        // 3. need a function to load saved data from localStorage then convert it back into an array with error handling to prevent crash if the data is broken or missing
+        function loadSubjectFromSchedule() {
+            const rawData = localStorage.getItem("scheduleData"); // get raw data from local storage\
+            // check if data exist
+            if (!rawData) {
+                return [];
+            }
+            try {
+                const parsedData = JSON.parse(rawData);
+                return Array.isArray(parsedData) ? parsedData : [];
+            } catch {
+                return []; // if broken data return empty array.
+            }
+
+
+        }
+        const schedule = loadSubjectFromSchedule();
+
+        // 4. convert scheduleData into subjects array
+        function scheduleToSubjects(scheduleArray) {
+            return scheduleArray.map((course) => ({
+                subjectCode: course.name,
+                subjectName: course.name,
+                units: course.units ?? 3,
+                grade: null,
+                semester: course.semester || "1-1"
+            }));
+        }
+        // use then create subject array variable
+        const subjects = scheduleToSubjects(schedule);
+        // subject: {subjectCode: courseName, subjectName: courseName, units: 3, grade: null, semester: courseInfo.semester}
+
+        // additional: merge saved units and grades before rendering:
+        const savedUnits = loadUnitsFromStorage();
+        savedUnits.forEach((saved) => {
+            const subj = subjects.find(
+                (s) => s.subjectCode === saved.subjectCode && s.semester === saved.semester
+            );
+            if (subj && saved.units) subj.units = saved.units;
+            if (subj && saved.grade !== undefined && saved.grade !== null) {
+                subj.grade = saved.grade;
+            }
+        });
+
+        // 5. a function for hide/show the empty state
+        function updateEmptyState(subjects) {
+            if (subjects.length === 0) { // if subject array length is 0 then it's still empty
+                emptyGwa.style.display = "block"; // this is how you update the inline style attribut value 
+                semesterList.innerHTML = ""; // removes everything in the <div>
+
+            } else { // else may laman
+                emptyGwa.style.display = "none" // hides the empty message
+            }
+
+        }
+        updateEmptyState(subjects);
+
+        // 6. group subjects per sem
+        function groupBySemester(subjects) {
+            return subjects.reduce((groups, subject) => { // groups and subject are variable created in reduce 
+                const semesterKey = subject.semester || "Unsorted";
+                // pick the semester id form the subject. || if missing "Unsorted";
+
+                if (!groups[semesterKey]) { // if groups[semesterKey] has no element yet (doesn't exist)
+                    groups[semesterKey] = []; // example 
+                }
+
+                groups[semesterKey].push(subject);
+                return groups;
+            }, {});
+        }
+        let groupedSubjects = groupBySemester(subjects); // includes all the subject in all sem
+        //  additional function to exclude nstp and cvsu101 subject in the gwa computation
+        function isExcludedCourse(subject) {
+            const code = String(subject.subjectCode || "").toLowerCase().replace(/\s+/g, "");
+            const name = String(subject.subjectName || "").toLowerCase().replace(/\s+/g, "");
+            return code === "nstp" || code === "cvsu101" || name === "nstp" || name === "cvsu101";
+        }
+
+        // additional:  Add save/load helpers:
+        function saveUnitsToStorage(subjects) {
+            localStorage.setItem("gwaUnits", JSON.stringify(subjects));
+        }
+
+        function loadUnitsFromStorage() {
+            const raw = localStorage.getItem("gwaUnits");
+            if (!raw) return [];
+            try {
+                return JSON.parse(raw);
+            } catch {
+                return [];
+            }
+        }
+
+        function computeSemGwa(subjects) {
+            let totalUnits = 0;
+            let totalPoints = 0;
+
+            for (let i = 0; i < subjects.length; i++) {
+                const subject = subjects[i];
+
+                if (isExcludedCourse(subject)) {// if the subject is === to the excludedCourses then continue(skips the rest of the loop)
+                    continue;
+                }
+
+                // Guard: skip if no grade entered
+                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
+                    continue;
+                }
+
+                const units = Number(subject.units);
+                const grade = Number(subject.grade);
+
+                if (!isNaN(units) && units > 0 && !isNaN(grade) && grade >= 1.0) {
+                    totalUnits += units;
+                    totalPoints += units * grade;
+                }
+            }
+            if (totalUnits === 0) {
+                return null;
+            }
+
+            return totalPoints / totalUnits;
+        }
+
+        // 7. Render semester cards. eto hindi ko na alam:
+        function renderSemesters(groups) {
+            semesterList.innerHTML = "";
+
+            Object.keys(groups).forEach((semId) => {
+                const semBox = document.createElement("div");
+                semBox.className = "gwa-semester";
+
+                const semSubjects = groups[semId];
+                const semGwa = computeSemGwa(semSubjects);
+
+                const header = document.createElement("div");
+                header.className = "gwa-sem-header";
+
+                const title = document.createElement("div");
+                title.className = "gwa-semester-title";
+                title.textContent = getSemesterLabel(semId);
+
+                const gwaBox = document.createElement("div");
+                gwaBox.className = "gwa-sem-gwa";
+                gwaBox.textContent = `Sem GWA: ${semGwa === null ? "--" : semGwa.toFixed(2)}`;
+
+                header.appendChild(title);
+                header.appendChild(gwaBox);
+
+                const list = document.createElement("div");
+                list.className = "gwa-subject-list";
+
+                semSubjects.forEach((subject) => {
+                    const row = document.createElement("div");
+                    row.className = "gwa-subject-row";
+                    row.innerHTML = `
+                        <div class="gwa-subject-code">${subject.subjectCode}</div>
+                        <div class="gwa-subject-units">
+                        <input
+                            type="number"
+                            min="1"
+                            max="6"
+                            step="1"
+                            value="${subject.units ?? 3}"
+                            data-code="${subject.subjectCode}"
+                            data-sem="${subject.semester}"
+                            class="unit-input"
+                        >
+                        </div>
+                        <div class="gwa-subject-grade">
+                        <input
+                            type="number"
+                            min="1"
+                            max="5"
+                            step="0.01"
+                            value="${subject.grade ?? ""}"
+                            data-code="${subject.subjectCode}"
+                            data-sem="${subject.semester}"
+                            class="grade-input"
+                            placeholder="--"
+                        >
+                        </div>
+                        `;
+                    list.appendChild(row);
+                });
+
+                semBox.appendChild(header);
+                semBox.appendChild(list);
+                semesterList.appendChild(semBox);
+            });
+        }
+
+        function renderAll() {
+            groupedSubjects = groupBySemester(subjects);
+            renderSemesters(groupedSubjects);
+            const gwa = computeCumulativeGwa(groupedSubjects);
+            updateGwaDisplay(gwa);
+        }
+
+        semesterList.addEventListener("change", (e) => {
+            if (e.target.classList.contains("unit-input")) {
+                const code = e.target.dataset.code;
+                const sem = e.target.dataset.sem;
+                const value = Number(e.target.value);
+
+                const subj = subjects.find(
+                    (s) => s.subjectCode === code && s.semester === sem
+                );
+
+                if (subj && !isNaN(value) && value > 0) {
+                    subj.units = value;
+                    saveUnitsToStorage(subjects);
+                    renderAll();
+                }
+            }
+
+            if (e.target.classList.contains("grade-input")) {
+                const code = e.target.dataset.code;
+                const sem = e.target.dataset.sem;
+                const value = Number(e.target.value);
+
+                const subj = subjects.find(
+                    (s) => s.subjectCode === code && s.semester === sem
+                );
+
+                if (subj && !isNaN(value) && value > 0) {
+                    subj.grade = value;
+                    saveUnitsToStorage(subjects);
+                    renderAll();
+                }
+            }
+        });
+
+        // 8. compute the overall GWA 
+        function computeCumulativeGwa(allSubjects) {
+            // Step 1: turn grouped subjects into one list
+            let subjectsList = allSubjects;
+            if (!Array.isArray(allSubjects)) {
+                subjectsList = Object.values(allSubjects || {}).flat();
+            }
+
+            // Step 2: add up total units and total (units * grade)
+            let totalUnits = 0;
+            let totalWeightedGrades = 0;
+
+            for (let i = 0; i < subjectsList.length; i++) {
+                const subject = subjectsList[i];
+
+                // Skip excluded subjects like NSTP and CvSU 101
+                if (isExcludedCourse(subject)) {
+                    continue;
+                }
+
+                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
+                    continue;
+                }
+
+                const units = Number(subject.units);
+                const grade = Number(subject.grade);
+
+                if (!isNaN(units) && units > 0 && !isNaN(grade) && grade >= 1.0) {
+                    totalUnits += units;
+                    totalWeightedGrades += units * grade;
+                }
+            }
+
+            // Step 3: divide total grade points by total units
+            if (totalUnits === 0) {
+                return null;
+            }
+
+            return totalWeightedGrades / totalUnits;
+        }
+        // 9. update the UI with the gwa and honors(if)
+        function updateGwaDisplay(gwa) {
+            if (gwa === null) {// let's check first if gwa is null 
+                overallGWA.textContent = "--"; // change the textContent of the <div class="overallGWA"
+                honorDescription.textContent = "Add grades to see honors status.";
+                return;
+            }
+            overallGWA.textContent = gwa.toFixed(2);
+
+            // latin honors cut off:
+            // Summa: 1.00-1.21;
+            // Magna: 1.22-1.45;
+            // cumlaude: 1.40-1.75;
+
+            if (gwa >= 1.00 && gwa <= 1.20) honorDescription.textContent = "Summa Cum Laude"; //if gwa greater than 1 but less than 1.20 
+            else if (gwa <= 1.45) honorDescription.textContent = "Magna Cum Laude";// any gwa less than 1.45  is accepted in Magna
+            else if (gwa <= 1.75) honorDescription.textContent = "Cum Laude";
+            else honorDescription.textContent = "No Latin Honors";
+
+        }
+        renderAll();
+
+
+    </script>
+
+</body>
+
+</html>

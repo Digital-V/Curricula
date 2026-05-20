@@ -82,6 +82,8 @@
         document.getElementById('courseTimeStart').value = '';
         document.getElementById('courseTimeEnd').value = '';
         Array.from(document.getElementById('courseDays').options).forEach(opt => opt.selected = false);
+        document.getElementById('courseSemester').value = '1-1'; // starts with 1-1 in the semester form
+        document.getElementById('courseUnits').value = ''; // add Unit value in the form
         document.getElementById('courseRoom').value = '';
         document.querySelectorAll('input[name="courseType"]').forEach(radio => radio.checked = false);
     };
@@ -94,6 +96,8 @@
         const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value, 10));
         const courseType = document.querySelector('input[name="courseType"]:checked')?.value;
         const courseRoom = document.getElementById('courseRoom').value.trim();
+        const semesterValue = document.getElementById('courseSemester').value; // adds semester value in addcourse
+        const courseUnits = Number(document.getElementById("courseUnits").value) || 3; // adds unit value in addcourse
 
         if (!courseName || selectedDays.length === 0) {
             alert('Please enter a course name and select at least one day.');
@@ -156,6 +160,8 @@
             times: matchedSlots,
             type: courseType,
             room: courseRoom,
+            semester: semesterValue, // add a new data in the object
+            units: courseUnits,
             color: Math.random() > 0.5 ? 'light' : ''
         });
 
