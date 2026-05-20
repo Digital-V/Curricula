@@ -1,11 +1,11 @@
-(function() {
+(function () {
     function getCoursesFromHome() {
         const stored = localStorage.getItem('scheduleData');
         if (stored) {
-            try { 
+            try {
                 const parsed = JSON.parse(stored);
                 if (!Array.isArray(parsed)) {
-                    return Object.keys(parsed); 
+                    return Object.keys(parsed);
                 }
                 return [...new Set(parsed.map(c => c.name))];
             } catch (e) { return []; }
@@ -16,20 +16,26 @@
     function populateCourseSelector() {
         const courseSelect = document.getElementById('todo-course');
         if (!courseSelect) return;
-        
+
         courseSelect.innerHTML = '';
         const courses = getCoursesFromHome();
         
+        const hintOpt = document.createElement('option');
+        hintOpt.textContent = "--- Your scheduled courses appear here ---";
+        hintOpt.disabled = true;
+        courseSelect.appendChild(hintOpt);
+
         courses.forEach(c => {
             const o = document.createElement('option');
             o.value = c;
             o.textContent = c;
             courseSelect.appendChild(o);
         });
-        
+
         const genOpt = document.createElement('option');
         genOpt.value = 'General';
         genOpt.textContent = 'General';
+        genOpt.selected = true; 
         courseSelect.appendChild(genOpt);
     }
 
@@ -39,7 +45,7 @@
         populateCourseSelector();
     }
 
-    document.addEventListener('visibilitychange', function() {
+    document.addEventListener('visibilitychange', function () {
         if (!document.hidden) populateCourseSelector();
     });
 
@@ -55,11 +61,11 @@
 
     function updateCounters() {
         const totalEl = document.getElementById('total-counter');
-        if (!totalEl) return; 
+        if (!totalEl) return;
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
+
         totalEl.textContent = todos.filter(t => !t.done).length;
         document.getElementById('completed-counter').textContent = todos.filter(t => t.done).length;
         document.getElementById('missed-counter').textContent = todos.filter(t => {
@@ -70,7 +76,7 @@
 
     function renderTodos() {
         const list = document.getElementById('todo-list');
-        if (!list) return; 
+        if (!list) return;
 
         let filtered = todos.filter(t => {
             if (activeFilter === 'all') return true;
@@ -106,7 +112,7 @@
 
     renderTodos();
 
-    window.addTodo = function() {
+    window.addTodo = function () {
         const text = document.getElementById('todo-text').value.trim();
         if (!text) return;
         todos.unshift({
@@ -122,18 +128,18 @@
         renderTodos();
     };
 
-    window.toggleTodo = function(id) {
+    window.toggleTodo = function (id) {
         const t = todos.find(x => x.id === id);
         if (t) t.done = !t.done;
         renderTodos();
     };
 
-    window.deleteTodo = function(id) {
+    window.deleteTodo = function (id) {
         todos = todos.filter(x => x.id !== id);
         renderTodos();
     };
 
-    window.filterTodo = function(f, btn) {
+    window.filterTodo = function (f, btn) {
         activeFilter = f;
         document.querySelectorAll('.todo-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
