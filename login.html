@@ -23,6 +23,25 @@
         </form>
 
         <div class="auth-links">
+            <a href="#" id="forgotPasswordLink">Forgot password?</a>
+        </div>
+
+        <div id="forgotPasswordForm" style="display:none;" class="auth-form">
+            <div class="auth-subtitle" style="margin-bottom:12px;">Enter your Student Number to reset your password.</div>
+            <label for="resetId">Student Number</label>
+            <input type="text" id="resetId" placeholder="e.g. 202412345">
+
+            <label for="resetNewPassword">New Password</label>
+            <input type="password" id="resetNewPassword" placeholder="Enter new password">
+
+            <label for="resetConfirmPassword">Confirm New Password</label>
+            <input type="password" id="resetConfirmPassword" placeholder="Confirm new password">
+
+            <button type="button" class="auth-btn" id="resetSubmitBtn">Reset Password</button>
+            <button type="button" class="auth-btn" id="resetCancelBtn" style="background:transparent; color:#005201; border: 2px solid #005201; margin-top:0;">Cancel</button>
+        </div>
+
+        <div class="auth-links">
             Don't have an account? <a href="register.html">Register here</a>
         </div>
     </div>
