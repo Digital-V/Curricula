@@ -8,42 +8,54 @@
 </head>
 <body class="auth-body">
 
-    <div class="auth-card">
-        <div class="auth-logo">CURRICULA</div>
-        <div class="auth-subtitle">Welcome back! Please login to your account.</div>
+    <div class="auth-panels">
 
-        <form class="auth-form" id="loginForm">
-            <label for="loginId">Student Number</label>
-            <input type="text" id="loginId" placeholder="e.g. 202412345" required>
+        <div class="auth-panel" id="loginPanel">
+            <div class="auth-logo">CURRICULA</div>
+            <div class="auth-subtitle">Welcome back! Please login to your account.</div>
 
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" placeholder="••••••••" required>
+            <form class="auth-form" id="loginForm">
+                <label for="loginId">Student Number</label>
+                <input type="text" id="loginId" placeholder="e.g. 202412345" required>
 
-            <button type="submit" class="auth-btn">Login</button>
-        </form>
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
 
-        <div class="auth-links">
-            <a href="#" id="forgotPasswordLink">Forgot password?</a>
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+
+            <div class="auth-links" style="margin-top:16px;">
+                <a href="#" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+            <div class="auth-links">
+                Don't have an account? <a href="register.html">Register here</a>
+            </div>
         </div>
 
-        <div id="forgotPasswordForm" style="display:none;" class="auth-form">
-            <div class="auth-subtitle" style="margin-bottom:12px;">Enter your Student Number to reset your password.</div>
-            <label for="resetId">Student Number</label>
-            <input type="text" id="resetId" placeholder="e.g. 202412345">
+        <div class="auth-panel hidden" id="forgotPanel">
+            <div class="reset-panel-header">
+                <button class="reset-back-btn" id="resetBackBtn" title="Back to login"> < </button>
+                <span class="reset-panel-title">Reset Password</span>
+            </div>
 
-            <label for="resetNewPassword">New Password</label>
-            <input type="password" id="resetNewPassword" placeholder="Enter new password">
+            <div class="auth-subtitle" style="margin-bottom:20px; text-align:left;">
+                Enter your Student Number and choose a new password.
+            </div>
 
-            <label for="resetConfirmPassword">Confirm New Password</label>
-            <input type="password" id="resetConfirmPassword" placeholder="Confirm new password">
+            <div class="auth-form" id="forgotPasswordForm">
+                <label for="resetId">Student Number</label>
+                <input type="text" id="resetId" placeholder="e.g. 202412345">
 
-            <button type="button" class="auth-btn" id="resetSubmitBtn">Reset Password</button>
-            <button type="button" class="auth-btn" id="resetCancelBtn" style="background:transparent; color:#005201; border: 2px solid #005201; margin-top:0;">Cancel</button>
+                <label for="resetNewPassword">New Password</label>
+                <input type="password" id="resetNewPassword" placeholder="Enter new password">
+
+                <label for="resetConfirmPassword">Confirm New Password</label>
+                <input type="password" id="resetConfirmPassword" placeholder="Confirm new password">
+
+                <button type="button" class="auth-btn" id="resetSubmitBtn">Reset Password</button>
+            </div>
         </div>
 
-        <div class="auth-links">
-            Don't have an account? <a href="register.html">Register here</a>
-        </div>
     </div>
 
     <script src="auth.js"></script>

@@ -12,73 +12,72 @@
         }
     }
 
-    // Forgot password — show/hide inline reset form
     const forgotLink = document.getElementById('forgotPasswordLink');
-    const forgotForm = document.getElementById('forgotPasswordForm');
     const resetSubmitBtn = document.getElementById('resetSubmitBtn');
-    const resetCancelBtn = document.getElementById('resetCancelBtn');
+    const resetBackBtn = document.getElementById('resetBackBtn');
+    const loginPanel = document.getElementById('loginPanel');
+    const forgotPanel = document.getElementById('forgotPanel');
 
-    if (forgotLink) {
-        forgotLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            forgotForm.style.display = 'flex';
-            forgotForm.style.flexDirection = 'column';
-            forgotForm.style.gap = '16px';
-            forgotLink.style.display = 'none';
-        });
+    if (loginPanel && forgotPanel) {
+        function showForgotPanel() {
+            loginPanel.classList.add('hidden');
+            forgotPanel.classList.remove('hidden');
+        }
+
+        function showLoginPanel() {
+            forgotPanel.classList.add('hidden');
+            loginPanel.classList.remove('hidden');
+            if (document.getElementById('resetId')) document.getElementById('resetId').value = '';
+            if (document.getElementById('resetNewPassword')) document.getElementById('resetNewPassword').value = '';
+            if (document.getElementById('resetConfirmPassword')) document.getElementById('resetConfirmPassword').value = '';
+        }
+
+        if (forgotLink) {
+            forgotLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                showForgotPanel();
+            });
+        }
+
+        if (resetBackBtn) {
+            resetBackBtn.addEventListener('click', showLoginPanel);
+        }
+
+        if (resetSubmitBtn) {
+            resetSubmitBtn.addEventListener('click', function () {
+                const studentId = document.getElementById('resetId').value.trim();
+                const newPassword = document.getElementById('resetNewPassword').value.trim();
+                const confirmPassword = document.getElementById('resetConfirmPassword').value.trim();
+
+                if (!studentId || !newPassword || !confirmPassword) {
+                    alert("Please fill out all fields.");
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    alert("Passwords do not match. Please try again.");
+                    return;
+                }
+
+                const storedCredentials = JSON.parse(localStorage.getItem('registeredUser') || 'null');
+
+                if (!storedCredentials || storedCredentials.studentId !== studentId) {
+                    alert("No account found with that Student Number.");
+                    return;
+                }
+
+                storedCredentials.password = newPassword;
+                localStorage.setItem('registeredUser', JSON.stringify(storedCredentials));
+
+                alert("Password reset successfully! You can now log in with your new password.");
+                showLoginPanel();
+            });
+        }
+
+        if (window.location.hash === '#forgot') {
+            showForgotPanel();
+        }
     }
-
-    if (resetCancelBtn) {
-        resetCancelBtn.addEventListener('click', function () {
-            forgotForm.style.display = 'none';
-            forgotLink.style.display = 'inline';
-            document.getElementById('resetId').value = '';
-            document.getElementById('resetNewPassword').value = '';
-            document.getElementById('resetConfirmPassword').value = '';
-        });
-    }
-
-    if (resetSubmitBtn) {
-        resetSubmitBtn.addEventListener('click', function () {
-            const studentId = document.getElementById('resetId').value.trim();
-            const newPassword = document.getElementById('resetNewPassword').value.trim();
-            const confirmPassword = document.getElementById('resetConfirmPassword').value.trim();
-
-            if (!studentId || !newPassword || !confirmPassword) {
-                alert("Please fill out all fields.");
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                alert("Passwords do not match. Please try again.");
-                return;
-            }
-
-            const storedCredentials = JSON.parse(localStorage.getItem('registeredUser') || 'null');
-
-            if (!storedCredentials || storedCredentials.studentId !== studentId) {
-                alert("No account found with that Student Number.");
-                return;
-            }
-
-            storedCredentials.password = newPassword;
-            localStorage.setItem('registeredUser', JSON.stringify(storedCredentials));
-
-            alert("Password reset successfully! You can now log in with your new password.");
-            forgotForm.style.display = 'none';
-            forgotLink.style.display = 'inline';
-            document.getElementById('resetId').value = '';
-            document.getElementById('resetNewPassword').value = '';
-            document.getElementById('resetConfirmPassword').value = '';
-        });
-    }
-
-    // Auto-open forgot form if redirected here from register page via #forgot
-    if (window.location.hash === '#forgot' && forgotLink) {
-        forgotLink.click();
-    }
-
-
     if (loginForm) {
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -103,7 +102,6 @@
                 return;
             }
 
-            // Set a lightweight session marker (not the password)
             localStorage.setItem('sessionUser', JSON.stringify({ studentId }));
 
             alert("Login successful! Redirecting to Dashboard...");
@@ -125,7 +123,6 @@
                 return;
             }
 
-            // Store credentials separately from personal info
             localStorage.setItem('registeredUser', JSON.stringify({ studentId, password }));
 
             const initialInfo = {
