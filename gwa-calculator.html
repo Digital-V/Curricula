@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GWA Calculator</title>
     <link rel="stylesheet" href="style.css">
-    
+
 </head>
 
 <body>
@@ -57,31 +57,13 @@
         // function: read subject, render them, compute GWA, show/hide empty state.
 
         // 1. grab gthe key elements
-        const semesterList = document.getElementById("semester-list");
+        const semesterList = document.getElementById("semester-list");// empty list later render it using js
         const overallGWA = document.getElementById("overall-gwa-value");
-        const honorDescription = document.getElementById("honor-description");
-        const emptyGwa = document.getElementById("gwa-empty");
+        // div with -- to replace later
+        const honorDescription = document.getElementById("honor-description"); // div message to replace when commulatative gwa is computed
+        const emptyGwa = document.getElementById("gwa-empty"); // div message "No subject yet" replace if add subject
 
-        //2. add subjects from the schedule page into GWA:
-
-        const SEMESTERS = [
-            { id: "1-1", label: "1st Year - 1st Sem" },
-            { id: "1-2", label: "1st Year - 2nd Sem" },
-            { id: "2-1", label: "2nd Year - 1st Sem" },
-            { id: "2-2", label: "2nd Year - 2nd Sem" },
-            { id: "3-1", label: "3rd Year - 1st Sem" },
-            { id: "3-2", label: "3rd Year - 2nd Sem" },
-            { id: "4-1", label: "4th Year - 1st Sem" },
-            { id: "4-2", label: "4th Year - 2nd Sem" }
-        ];
-
-        function getSemesterLabel(semId) {
-            const match = SEMESTERS.find((s) => s.id === semId);
-            return match ? match.label : semId;
-        }
-
-
-        // 3. need a function to load saved data from localStorage then convert it back into an array with error handling to prevent crash if the data is broken or missing
+        // 2. need a function to load saved data from localStorage then convert it back into an array with error handling to prevent crash if the data is broken or missing
         function loadSubjectFromSchedule() {
             const rawData = localStorage.getItem("scheduleData"); // get raw data from local storage\
             // check if data exist
@@ -90,14 +72,19 @@
             }
             try {
                 const parsedData = JSON.parse(rawData);
-                return Array.isArray(parsedData) ? parsedData : [];
+                if (Array.isArray(parsedData)) {
+                    return parsedData;
+                } else {
+                    return [];
+                }
+
             } catch {
                 return []; // if broken data return empty array.
             }
 
 
         }
-        const schedule = loadSubjectFromSchedule();
+        const schedule = loadSubjectFromSchedule(); // scheduleArray
 
         // 4. convert scheduleData into subjects array
         function scheduleToSubjects(scheduleArray) {
@@ -129,7 +116,7 @@
         function updateEmptyState(subjects) {
             if (subjects.length === 0) { // if subject array length is 0 then it's still empty
                 emptyGwa.style.display = "block"; // this is how you update the inline style attribut value 
-                semesterList.innerHTML = ""; // removes everything in the <div>
+                semesterList.innerHTML = ""; // removes the message in the <div>
 
             } else { // else may laman
                 emptyGwa.style.display = "none" // hides the empty message
@@ -140,19 +127,26 @@
 
         // 6. group subjects per sem
         function groupBySemester(subjects) {
-            return subjects.reduce((groups, subject) => { // groups and subject are variable created in reduce 
+            const groups = {}; // object that will store the grouped subjects
+            // loop through every subject
+            for (let i = 0; i < subjects.length; i++) {
+                const subject = subjects[i];
+
                 const semesterKey = subject.semester || "Unsorted";
-                // pick the semester id form the subject. || if missing "Unsorted";
 
-                if (!groups[semesterKey]) { // if groups[semesterKey] has no element yet (doesn't exist)
-                    groups[semesterKey] = []; // example 
+                // create a semester array if, check first if it doesn't exist
+                if (!groups[semesterKey]) {
+                    groups[semesterKey] = [];
                 }
-
+                // add subject
                 groups[semesterKey].push(subject);
-                return groups;
-            }, {});
+            }
+            return groups;
+
+
         }
         let groupedSubjects = groupBySemester(subjects); // includes all the subject in all sem
+
         //  additional function to exclude nstp and cvsu101 subject in the gwa computation
         function isExcludedCourse(subject) {
             const code = String(subject.subjectCode || "").toLowerCase().replace(/\s+/g, "");
@@ -204,6 +198,32 @@
             }
 
             return totalPoints / totalUnits;
+        }
+
+        const SEMESTERS = [
+            { id: "1-1", label: "1st Year - 1st Sem" },
+            { id: "1-2", label: "1st Year - 2nd Sem" },
+            { id: "2-1", label: "2nd Year - 1st Sem" },
+            { id: "2-2", label: "2nd Year - 2nd Sem" },
+            { id: "3-1", label: "3rd Year - 1st Sem" },
+            { id: "3-2", label: "3rd Year - 2nd Sem" },
+            { id: "4-1", label: "4th Year - 1st Sem" },
+            { id: "4-2", label: "4th Year - 2nd Sem" }
+        ];
+
+        // i need a function to translate the key from input to readable string of semester per year.
+        function getSemesterLabel(semId) {
+            for (let i = 0; i < SEMESTERS.length; i++) {
+                const semester = SEMESTERS[i];
+
+                // find match
+                if (semester.id === semId) {
+                    // return the label if found
+                    return semester.label
+                }
+            }
+            //else return asis
+            return semId;
         }
 
         // 7. Render semester cards. eto hindi ko na alam:
@@ -348,11 +368,11 @@
                 }
             }
 
-            // Step 3: divide total grade points by total units
             if (totalUnits === 0) {
                 return null;
             }
 
+            // Step 3: divide total grade points by total units
             return totalWeightedGrades / totalUnits;
         }
         // 9. update the UI with the gwa and honors(if)
@@ -367,15 +387,78 @@
             // latin honors cut off:
             // Summa: 1.00-1.21;
             // Magna: 1.22-1.45;
-            // cumlaude: 1.40-1.75;
+            // cumlaude: 1.46-1.75;
+            const latinHonor = checkMinimumPerGrade(subjects);
 
-            if (gwa >= 1.00 && gwa <= 1.20) honorDescription.textContent = "Summa Cum Laude"; //if gwa greater than 1 but less than 1.20 
-            else if (gwa <= 1.45) honorDescription.textContent = "Magna Cum Laude";// any gwa less than 1.45  is accepted in Magna
-            else if (gwa <= 1.75) honorDescription.textContent = "Cum Laude";
-            else honorDescription.textContent = "No Latin Honors";
+            const summa = latinHonor.summa;
+            const magna = latinHonor.magna;
+            const cumlaude = latinHonor.cumlaude;
+
+            if (gwa >= 1.00 && gwa <= 1.21) {
+                if (summa) {
+                    honorDescription.textContent = "Summa Cum Laude";
+                } else {
+                    honorDescription.textContent = "No Latin Honors";
+                }
+            } else if (gwa >= 1.22 && gwa <= 1.45) {
+                if (magna) {
+                    honorDescription.textContent = "Magna Cum Laude";
+                } else if (cumlaude) {
+                    honorDescription.textContent = "Cum Laude";
+                } else {
+                    honorDescription.textContent = "No Latin Honors";
+                }
+            } else if (gwa >= 1.46 && gwa <= 1.75) {
+                if (cumlaude) {
+                    honorDescription.textContent = "Cum Laude";
+                } else {
+                    honorDescription.textContent = "No Latin Honors";
+                }
+            } else {
+                honorDescription.textContent = "No Latin Honors";
+            }
 
         }
         renderAll();
+
+        // I need a function that check the grades in every subject per semester, cause latin honors has a minimum grade requirement per subject return true if it detects a grade below minimum grade
+        function checkMinimumPerGrade(subjects) {
+            let summa = true;
+            let magna = true;
+            let cumlaude = true;
+
+            // loop through all the subject
+            for (let i = 0; i < subjects.length; i++) {
+                const subject = subjects[i];
+
+                // Skip excluded subjects like NSTP and CvSU 101
+                if (isExcludedCourse(subject)) {
+                    continue;
+                }
+                // pass if the grade is missing
+                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
+                    continue;
+                }
+
+
+                const grade = Number(subject.grade);
+
+                if (!isNaN(grade)) {// verify if a number then proceed to 
+                    if (grade > 1.75) {// if grade is bellow 1.75 then student is not qualified for summa anymore
+                        summa = false;
+                    }
+                    if (grade > 2.00) {
+                        magna = false;
+                    }
+                    if (grade > 2.25) {
+                        cumlaude = false;
+                    }
+
+                }
+            }
+            return { summa, magna, cumlaude };
+
+        }
 
 
     </script>
