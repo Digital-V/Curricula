@@ -11,7 +11,7 @@
                 <img class="profile-img" src="" alt="Profile Image">    
                 <h3></h3>
                 <h2></h2>
-                <button class="logout-btn" onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'">Logout</button>
+                <button class="logout-btn" onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'"><img src="logout.png" alt="Logout" class="logout-icon"></button>
             </div>
             <div id="personalInfoPanel" class="personal-info-panel">
                 <div class="modal-content">
@@ -134,20 +134,20 @@
             <div class="sidebar">
                 <button onclick="window.location.href='home.html'">
                     <span class="btn-icon"><img src="calendar.png" alt="Weekly Schedule" class="btn-png-icon"></span>
-                    <span class="btn-label">Weekly Schedule</span>
                 </button>
                 <button onclick="window.location.href='attendance_tracker.html'">
                     <span class="btn-icon"><img src="user-check.png" alt="Attendance Tracker" class="btn-png-icon"></span>
-                    <span class="btn-label">Attendance Tracker</span>
                 </button>
                 <button class="active" onclick="alert('To-Do List')">
                     <span class="btn-icon"><img src="checklist.png" alt="To-Do List" class="btn-png-icon"></span>
-                    <span class="btn-label">To-Do List</span>
                 </button>
                 <button onclick="window.location.href='gwa_calculator.html'">
                     <span class="btn-icon"><img src="balance-sheet.png" alt="GWA Calculator" class="btn-png-icon"></span>
-                    <span class="btn-label">GWA Calculator</span>
                 </button>
+                <div class="sidebar-label-container">
+                    <div class="sidebar-label">CURRICULA</div>
+                    <img src="greenlogo.svg" alt="Logo" class="sidebar-logo">
+                </div>
             </div>
             <div class="maintab todo-maintab">
                 <div class="todo-title">
