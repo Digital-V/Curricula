@@ -547,6 +547,7 @@ header.expanded #personalInfoPanel > .modal-content {
 }
  
 #idPanel {
+  position: absolute;
   flex: 0 0 5000px;
   display: flex;
   flex-direction: column;
@@ -555,8 +556,8 @@ header.expanded #personalInfoPanel > .modal-content {
   transform: translate(0, -12px);
   pointer-events: none;
   transition:
-    opacity 0.3s ease 0.15s,
-    transform 0.3s ease 0.15s;
+  opacity 0.3s ease 0.15s,
+  transform 0.3s ease 0.15s;
   box-sizing: border-box;
 }
  
