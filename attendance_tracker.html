@@ -11,8 +11,9 @@
                 <img class="profile-img" src="" alt="Profile Image">    
                 <h3></h3>
                 <h2></h2>
+                <button class="logout-btn" onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'">Logout</button>
             </div>
-            <div id="personalInfoPanel">
+            <div id="personalInfoPanel" class="personal-info-panel">
                 <div class="modal-content">
                     <div class="modal-header">
                         <span>Personal Information</span>
@@ -70,7 +71,8 @@
                         </div>
                     </div>
                 </div>
-                    <div id="idPanel" class="id-panel">
+                
+                <div id="idPanel" class="id-panel">
                     <div class="modal-content">
                         <div class="modal-header">
                             <span>ID Generator</span>
@@ -124,6 +126,7 @@
                             <div class="modal-btn modal-btn-primary personalinfo-btn download-id-btn" onclick="generateIDCard()">Download ID Card</div>
                         </div>
                     </div>
+                </div>
                 
             </div>
         </header>
