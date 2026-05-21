@@ -119,8 +119,8 @@ header img {
 }
 
 .sidebar button.active {
-  background-color: #91c691;
-  color: #005201;
+  background-color: #49a349;
+  color: #ffffff;
   transform: translateX(20px);
   box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
 }
