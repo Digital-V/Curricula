@@ -100,29 +100,62 @@ header img {
 
 .sidebar button {
   margin: 20px 20px 20px -40px;
-  padding: 20px 0 20px 40px;
+  padding: 14px 20px 14px 40px;
   display: flex;
+  align-items: center;
+  gap: 12px;
   border-radius: 0 50px 50px 0;
-  width: 300px;
+  width: 80px;
   background-color: #ddf2df;
   color: #005201;
   border: 0;
   font-weight: 1000;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: width 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.sidebar button:hover {
+.sidebar button .btn-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar button .btn-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.sidebar button .btn-label {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
+  pointer-events: none;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  width: 300px;
   transform: translateX(20px);
   box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
+}
+
+.sidebar button:hover .btn-label,
+.sidebar button.active .btn-label {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .sidebar button.active {
   background-color: #49a349;
   color: #ffffff;
-  transform: translateX(20px);
-  box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
 }
 
 .maintab {
@@ -1517,4 +1550,52 @@ table.sched-table {
   color: #005201;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.btn-png-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: invert(18%) sepia(60%) saturate(800%) hue-rotate(90deg) brightness(60%);
+  transition: filter 0.3s ease;
+}
+
+.sidebar button:hover .btn-png-icon,
+.sidebar button.active .btn-png-icon {
+  filter: invert(1) brightness(2);
+}
+
+.logout-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+  filter: invert(18%) sepia(60%) saturate(800%) hue-rotate(90deg) brightness(60%);
+}
+
+.logout-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: unset !important;
+  transform: none !important;
+  margin: 0 20px 0 0 !important;
+  padding: 0 !important;
+  font-size: unset !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+.logout-btn:hover {
+  transform: none !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3) !important;
+}
+
+.logout-icon {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  filter: invert(1) brightness(2);
 }
