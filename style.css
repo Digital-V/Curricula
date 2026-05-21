@@ -417,8 +417,8 @@ table.sched-table {
   object-fit: cover;
   cursor: pointer;
   transition:
-    transform 0.25s ease,
-    opacity 0.25s ease;
+  transform 0.25s ease,
+  opacity 0.25s ease;
 }
 
 .profile-img:hover {
@@ -427,28 +427,36 @@ table.sched-table {
 }
 
 #personalInfoPanel {
-  width: 980px;
   position: absolute;
   left: 40px;
-  right: auto;
+  right: 40px;
   top: 80px;
   z-index: 40;
-  display: block;
-  max-height: 0;
-  opacity: 0;
-  transform: translate(0, -8px);
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
   pointer-events: none;
+  box-sizing: border-box;
+}
+
+#personalInfoPanel > .modal-content {
+  flex: 1 1 auto;
+  width: 0;
+  min-width: 1100px;
+  opacity: 0;
+  transform: translate(0, -12px);
   transition:
-    max-height 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.25s ease,
-    transform 0.25s ease;
+  opacity 0.3s ease 0.15s,
+  transform 0.3s ease 0.15s;
 }
 
 header.expanded #personalInfoPanel {
-  max-height: 720px;
+  pointer-events: auto;
+}
+
+header.expanded #personalInfoPanel > .modal-content {
   opacity: 1;
   transform: translate(0, 0);
-  pointer-events: auto;
 }
 
 .personal_img_upload {
@@ -517,6 +525,122 @@ header.expanded #personalInfoPanel {
   object-fit: cover;
   background: #f0f0f0;
 }
+
+/* =============================================
+    ID_CARD.HTML
+============================================= */
+.personal-info-panel {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 40px;
+}
+.modal-content--wide {
+  flex: 0 1 auto;
+  min-width: 1000px;
+}
+ 
+#idPanel {
+  flex: 0 0 5000px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translate(0, -12px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease 0.15s,
+    transform 0.3s ease 0.15s;
+  box-sizing: border-box;
+}
+ 
+header.expanded #idPanel {
+  opacity: 1;
+  transform: translate(0, 0);
+  pointer-events: auto;
+}
+ 
+.id-card {
+  background: #17641d;
+  color: #eef9e9;
+  border-radius: 18px;
+  padding: 14px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+.id-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5px;
+  gap: 12px;
+}
+.id-card-header-text {
+  display: flex;
+  flex-direction: column;
+  padding-top: 22px;
+}
+.id-card-logo {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.id-card-body {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  align-items: center;
+}
+.id-personal-img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+}
+.id-card-grid {
+  flex: 1;
+  display: grid;
+  gap: 12px;
+}
+.id-card-info {
+  background: rgb(255, 255, 255);
+  border-radius: 12px;
+  padding: 12px;
+  color: #000;
+}
+.id-card-info--alt {
+  background: rgba(255, 255, 255, 0.993);
+  color: #000;
+}
+.id-card-small-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.id-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.id-card-status {
+  background: rgba(255, 255, 255, 0.16);
+  color: #f8fcec;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.download-id-btn {
+  padding: 8px 12px;
+  font-size: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 /* =============================================
    HOME.HTML — WEEKLY SCHEDULE
    ============================================= */
