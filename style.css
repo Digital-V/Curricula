@@ -24,7 +24,7 @@ header {
   display: block;
   border-radius: 40px;
   background-color: #005201;
-  margin: 10px 20px 15px 20px;
+  margin: 10px 20px 10px 20px;
   height: 70px;
   transition:
     height 0.35s ease,
@@ -73,7 +73,8 @@ header img {
 
 #grid {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 12fr;
+  margin-top: 20px;
   gap: 0;
   min-height: 900px;
   align-items: stretch;
@@ -88,9 +89,11 @@ header img {
 .sidebar {
   background-color: #005201;
   border-radius: 0 40px 40px 0;
-  padding: 20px;
+  padding: 10px;
   transition: opacity 0.35s ease;
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
+  height: 330px;
+  width: 110px;
 }
 
 .sidebar.faded {
@@ -99,13 +102,13 @@ header img {
 }
 
 .sidebar button {
-  margin: 20px 20px 20px -40px;
+  margin: 20px 20px 20px -30px;
   padding: 14px 20px 14px 40px;
   display: flex;
   align-items: center;
   gap: 12px;
   border-radius: 0 50px 50px 0;
-  width: 80px;
+  width: 100px;
   background-color: #ddf2df;
   color: #005201;
   border: 0;
@@ -133,29 +136,52 @@ header img {
   flex-shrink: 0;
 }
 
-.sidebar button .btn-label {
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
-  pointer-events: none;
-}
-
 .sidebar button:hover,
 .sidebar button.active {
-  width: 300px;
+  width: 100px;
   transform: translateX(20px);
   box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
-}
-
-.sidebar button:hover .btn-label,
-.sidebar button.active .btn-label {
-  opacity: 1;
-  transform: translateX(0);
 }
 
 .sidebar button.active {
   background-color: #49a349;
   color: #ffffff;
+  padding-left: 50px;
+}
+
+.sidebar button.active .btn-icon {
+  transform: translateX(px);
+}
+
+.sidebar-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: #005201;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 5px;
+  margin-top: 50px;
+  padding: 20px 0;
+  transform: rotate(180deg);
+  opacity: 0.3;
+}
+
+.sidebar-label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  padding-bottom: 20px;
+}
+
+.sidebar-logo {
+  width: 60px;
+  height: 60px;
+  opacity: 0.3;
+  transform: rotate(-90deg);
+  margin-top: -10px;
 }
 
 .maintab {
@@ -166,14 +192,11 @@ header img {
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
-.schedule-title {
-  font-size: 30px;
-  padding: 0 20px 0 20px;
-  font-weight: 1000;
-  color: #005201;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
+/* Scrollable maintab for attendance tracker and todo list */
+.maintab.att-maintab,
+.maintab.todo-maintab {
+  overflow-y: auto;
+  max-height: calc(100vh - 110px);
 }
 
 .schedule-header {
@@ -262,8 +285,9 @@ table.sched-table {
 }
 
 .sched-table td:has(.cell-block) {
-  padding: 10px;
-  height: 1px;
+  padding: 8px;
+  height: auto;
+  vertical-align: middle;
 }
 
 .add-course-btn {
@@ -750,6 +774,7 @@ header.expanded #idPanel {
   color: #005201;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin-top: -2px;
   margin-bottom: 16px;
 }
 
@@ -822,8 +847,17 @@ table.sched-table {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  min-height: 60px;
+  box-sizing: border-box;
+  cursor: pointer;
 }
+
+/* DUPLICATE - Line 817 cell-block removed */
 
 .cell-block.light {
   background: #91c691;
@@ -1143,6 +1177,7 @@ table.sched-table {
   gap: 6px;
   flex-wrap: wrap;
   margin-bottom: 12px;
+  margin-left: 20px;
 }
 
 .todo-filter-btn {
@@ -1164,6 +1199,10 @@ table.sched-table {
   border-color: #005201;
 }
 
+.todo-filter-btn:hover {
+  background: rgba(0, 82, 1, 0.25);
+}
+
 .todo-add-form {
   position: sticky;
   bottom: 20px;
@@ -1175,8 +1214,8 @@ table.sched-table {
   gap: 8px;
   box-sizing: border-box;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-top: auto;
+  box-shadow: 0 0 30px rgb(0, 0, 0, 0.25);
 }
 
 .todo-add-form input,
@@ -1568,7 +1607,7 @@ table.sched-table {
 .logout-icon {
   width: 18px;
   height: 18px;
-  margin-right: 6px;
+  margin: 2px;
   vertical-align: middle;
   filter: invert(18%) sepia(60%) saturate(800%) hue-rotate(90deg) brightness(60%);
 }
@@ -1586,6 +1625,7 @@ table.sched-table {
   font-size: unset !important;
   border-radius: 50% !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
 .logout-btn:hover {
