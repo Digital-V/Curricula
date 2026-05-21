@@ -25,6 +25,30 @@ function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function updateIDCardFields(info) {
+    try {
+        const idName = document.getElementById('idCardName');
+        const idStudent = document.getElementById('idCardStudentNumber');
+        const idProgram = document.getElementById('idCardProgram');
+        const idContact = document.getElementById('idCardContact');
+        const idYear = document.getElementById('idCardYear');
+        const idSection = document.getElementById('idCardSection');
+        const idStatus = document.getElementById('idCardStatus');
+        const idImg = document.getElementById('idPersonalImg');
+
+        if (idName) idName.textContent = info.name ? capitalizeFirst(info.name) : '—';
+        if (idStudent) idStudent.textContent = info.studentId || '—';
+        if (idProgram) idProgram.textContent = info.course || '—';
+        if (idContact) idContact.textContent = info.contact || '—';
+        if (idYear) idYear.textContent = info.yearLevel || '—';
+        if (idSection) idSection.textContent = info.section || '—';
+        if (idStatus) idStatus.textContent = info.status === 'enrolled' ? 'Regular' : (info.status === 'irregular' ? 'Irregular' : (info.status || '—'));
+        if (idImg && info.profileImage) idImg.src = info.profileImage;
+    } catch (e) {
+        console.warn('Unable to update ID card fields', e);
+    }
+}
+
 function savePersonalInfo() {
     const yearInput = document.getElementById('personalYearLevel');
     let yearRaw = yearInput ? yearInput.value.trim() : '';
@@ -69,6 +93,7 @@ function savePersonalInfo() {
         const statusLabel = info.status == 'enrolled' ? 'regular' : info.status == 'irregular' ? 'Irregular' : 'Enrollment Status';
         headerStatus.textContent = statusLabel;
     }
+    try { updateIDCardFields(info); } catch (e) {  }
     closePersonalInfo();
 }
 
@@ -148,11 +173,47 @@ function loadPersonalInfo() {
     if (headerStatus) {
         const statusLabel = info.status === 'enrolled' ? 'Regular' : info.status === 'irregular' ? 'Irregular' : 'Enrollment Status';
         headerStatus.textContent = statusLabel;
-    }
+    }  try { updateIDCardFields(info); } catch (e) { console.warn('Unable to populate ID preview fields', e); }
     } catch (error) {
         console.warn('Unable to load personal info', error);
     }
 }
+
+window.generateIDCard = function () {
+    if (typeof html2canvas !== 'function') {
+        alert('ID generation requires html2canvas. Check your internet connection.');
+        return;
+    }
+
+    const card = document.querySelector('.id-card');
+    if (!card) {
+        alert('ID card element not found.');
+        return;
+    }
+    html2canvas(card, { backgroundColor: null, scale: 2, useCORS: true })
+        .then(canvas => {
+            canvas.toBlob(function (blob) {
+                if (!blob) {
+                    alert('Failed to generate image.');
+                    return;
+                }
+                const filenameBase = (document.getElementById('personalStudentId') && document.getElementById('personalStudentId').value.trim()) || 'student-id';
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${filenameBase}.png`;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    URL.revokeObjectURL(link.href);
+                    link.remove();
+                }, 1000);
+            }, 'image/png');
+        })
+        .catch(err => {
+            console.error('html2canvas error', err);
+            alert('Unable to generate ID image. If you are using an external profile image, upload a local image first.');
+        });
+};
 
 document.addEventListener('DOMContentLoaded', loadPersonalInfo);
 
@@ -181,6 +242,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dataUrl = ev.target.result;
                 if (previewImg) previewImg.src = dataUrl;
                 if (headerImg) headerImg.src = dataUrl;
+                const idImg = document.getElementById('idPersonalImg');
+                if (idImg) idImg.src = dataUrl;
                 try {
                     const stored = JSON.parse(localStorage.getItem('personalInfo') || '{}');
                     stored.profileImage = dataUrl;
