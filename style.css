@@ -434,33 +434,40 @@ table.sched-table {
 
 #personalInfoPanel {
   position: absolute;
-  left: 40px;
-  right: 40px;
-  top: 80px;
+  left: 24px;
+  right: 24px;
+  top: 90px;
   z-index: 40;
   display: flex;
-  align-items: stretch;
-  gap: 24px;
+  flex-direction: row;    
+  align-items: stretch;     
+  gap: 10px;                 
   pointer-events: none;
   box-sizing: border-box;
 }
 
 #personalInfoPanel > .modal-content {
-  flex: 1 1 auto;
-  width: 0;
-  min-width: 1100px;
+  flex: 1 1 auto;           
+  width: auto;              
+  max-width: none;         
+  background-color: #ddf2df;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translate(0, -12px);
   transition:
-  opacity 0.3s ease 0.15s,
-  transform 0.3s ease 0.15s;
+    opacity 0.3s ease 0.15s,
+    transform 0.3s ease 0.15s;
+  box-sizing: border-box;
 }
 
 header.expanded #personalInfoPanel {
   pointer-events: auto;
 }
 
-header.expanded #personalInfoPanel > .modal-content {
+header.expanded #personalInfoPanel > .modal-content,
+header.expanded #idPanel {
   opacity: 1;
   transform: translate(0, 0);
 }
@@ -474,7 +481,7 @@ header.expanded #personalInfoPanel > .modal-content {
 
 .personal-panel-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 200px 1fr;
   gap: 20px;
   align-items: start;
 }
@@ -501,7 +508,6 @@ header.expanded #personalInfoPanel > .modal-content {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin-right: 12px;
 }
 
 .personal-preview-hint {
@@ -525,8 +531,8 @@ header.expanded #personalInfoPanel > .modal-content {
 }
 
 .personal_img_upload .personal-preview {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
   background: #f0f0f0;
@@ -537,33 +543,31 @@ header.expanded #personalInfoPanel > .modal-content {
 ============================================= */
 .personal-info-panel {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 40px;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
 }
 .modal-content--wide {
-  flex: 0 1 auto;
-  min-width: 1000px;
+  flex: 1 1 auto;
 }
  
 #idPanel {
-  position: absolute;
-  flex: 0 0 5000px;
+  flex: 0 0 700px;          
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between; 
+  padding: 24px;
+  border-radius: 20px;
   opacity: 0;
   transform: translate(0, -12px);
   pointer-events: none;
   transition:
-  opacity 0.3s ease 0.15s,
-  transform 0.3s ease 0.15s;
+    opacity 0.3s ease 0.15s,
+    transform 0.3s ease 0.15s;
   box-sizing: border-box;
 }
  
 header.expanded #idPanel {
-  opacity: 1;
-  transform: translate(0, 0);
   pointer-events: auto;
 }
  
@@ -571,7 +575,7 @@ header.expanded #idPanel {
   background: #17641d;
   color: #eef9e9;
   border-radius: 18px;
-  padding: 14px;
+  padding: 16px;
   min-height: 100px;
   display: flex;
   flex-direction: column;
@@ -589,33 +593,35 @@ header.expanded #idPanel {
   padding-top: 22px;
 }
 .id-card-logo {
-  width: 110px;
-  height: 110px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
 }
 .id-card-body {
   display: flex;
   gap: 12px;
-  margin-top: 6px;
+  margin-top: 12px;
   align-items: center;
 }
 .id-personal-img {
-  width: 180px;
-  height: 180px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   border: 5px solid rgba(255, 255, 255, 0.2);
 }
 .id-card-grid {
   flex: 1;
+  min-width: 180px;
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 .id-card-info {
   background: rgb(255, 255, 255);
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px;
   color: #000;
+  font-size: 13px;
 }
 .id-card-info--alt {
   background: rgba(255, 255, 255, 0.993);
@@ -624,28 +630,80 @@ header.expanded #idPanel {
 .id-card-small-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 20px;
+  gap: 8px;
+  margin-top: 12px;
 }
 .id-card-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 18px;
+  margin-top: 14px;
 }
 .id-card-status {
   background: rgba(255, 255, 255, 0.16);
   color: #f8fcec;
   border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 12px;
+  padding: 6px 12px;
+  font-size: 11px;
   text-transform: uppercase;
 }
 .download-id-btn {
-  padding: 8px 12px;
+  background-color: #005201;
+  color: white;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 12px;
   font-size: 15px;
   border-radius: 12px;
-  margin-top: 15px;
+   
+  margin-top: 24px;          
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  transition: background 0.2s ease;
+}
+
+.download-id-btn:hover {
+  background-color: #003d01;
+}
+
+
+#personalInfoPanel .modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+#personalInfoPanel .modal-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  #personalInfoPanel {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;     
+  }
+  #idPanel {
+    flex: 1 1 auto;         
+    width: 100%;
+  }
 }
 
 /* =============================================
