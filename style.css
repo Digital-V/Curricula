@@ -33,11 +33,13 @@ header {
   overflow: hidden;
   position: relative;
   z-index: 100;
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
 header.expanded {
   height: 820px;
   margin-bottom: -750px;
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
 .header-top {
@@ -88,6 +90,7 @@ header img {
   border-radius: 0 40px 40px 0;
   padding: 20px;
   transition: opacity 0.35s ease;
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
 .sidebar.faded {
@@ -111,13 +114,15 @@ header img {
 }
 
 .sidebar button:hover {
-  transform: translateX(20px);
+  transform: translateX(20px);\
+  box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
 }
 
 .sidebar button.active {
   background-color: #91c691;
   color: #005201;
   transform: translateX(20px);
+  box-shadow: 0 5px 30px rgb(0, 0, 0, 0.5);
 }
 
 .maintab {
@@ -125,6 +130,7 @@ header img {
   margin: 0 20px 0 20px;
   background-color: #ddf2df;
   border-radius: 40px;
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
 .schedule-title {
@@ -1395,8 +1401,8 @@ table.sched-table {
 }
 
 .logout-btn:hover {
-  background-color: #ddf2df;
-  color: #005201;
+  background-color: #c41e3a;
+  color: white;
 }
 
 .auth-panels {
