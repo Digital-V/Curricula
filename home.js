@@ -160,8 +160,8 @@
             times: matchedSlots,
             type: courseType,
             room: courseRoom,
-            semester: semesterValue, // add a new data in the object
-            units: courseUnits,
+            semester: semesterValue, // add semester
+            units: courseUnits, // add units 
             color: Math.random() > 0.5 ? 'light' : ''
         });
 

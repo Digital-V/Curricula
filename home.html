@@ -156,8 +156,8 @@
                             onclick="generateIDCard()">Download ID Card</div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </header>
 
@@ -165,20 +165,20 @@
         <div class="sidebar">
             <button class="active" onclick="alert('Weekly Schedule')">
                 <span class="btn-icon"><img src="calendar.png" alt="Weekly Schedule" class="btn-png-icon"></span>
-                <span class="btn-label">Weekly Schedule</span>
             </button>
             <button onclick="window.location.href='attendance_tracker.html'">
                 <span class="btn-icon"><img src="user-check.png" alt="Attendance Tracker" class="btn-png-icon"></span>
-                <span class="btn-label">Attendance Tracker</span>
             </button>
             <button onclick="window.location.href='todo_list.html'">
                 <span class="btn-icon"><img src="checklist.png" alt="To-Do List" class="btn-png-icon"></span>
-                <span class="btn-label">To-Do List</span>
             </button>
             <button onclick="window.location.href='gwa-calculator.html'">
                 <span class="btn-icon"><img src="balance-sheet.png" alt="GWA Calculator" class="btn-png-icon"></span>
-                <span class="btn-label">GWA Calculator</span>
             </button>
+            <div class="sidebar-label-container">
+                <div class="sidebar-label">CURRICULA</div>
+                <img src="greenlogo.svg" alt="Logo" class="sidebar-logo">
+            </div>
         </div>
         <div class="maintab">
             <div class="schedule-header">
@@ -216,7 +216,6 @@
 
                     <label>Units</label>
                     <input type="number" id="courseUnits" min="1" max="6" step="1" placeholder="example: 3">
-                    <!-- max unit is 6 ata? -->
 
                     <label>Start Time</label>
                     <input type="time" id="courseTimeStart">
@@ -234,7 +233,7 @@
                         <option value="5">Saturday</option>
                     </select>
 
-                    <label>Semester</label> <!-- add a semester in the form -->
+                    <label>Semester</label>
                     <select id="courseSemester">
                         <option value="1-1">1st Year - 1st Sem</option>
                         <option value="1-2">1st Year - 2nd Sem</option>
