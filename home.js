@@ -150,9 +150,7 @@ function buildSchedule() {
                 };
 
                 eventDiv.innerHTML = `
-                    <div class="event-title">${course.name}</div>
-                    <div class="event-time">${formatTime(course.exactStart)} - ${formatTime(course.exactEnd)}</div>
-                    ${course.room ? `<div class="event-room">${course.room}</div>` : ''}
+                    <div class="event-title" style="font-size: 18px; text-align: center; padding: 10px 5px; margin-top: 15px;">${course.name}</div>
                 `;
                 eventDiv.onclick = () => openCourseDetailModal(course.name.replace(/'/g, "\\'"));
                 dayContainer.appendChild(eventDiv);
