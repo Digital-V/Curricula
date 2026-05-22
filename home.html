@@ -187,20 +187,28 @@
                 <button class="clear-all-btn" onclick="clearAllCourses()">Clear All</button>
             </div>
             <div class="schedule-wrap">
-                <table class="sched-table" id="sched-table">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
-                            <th>Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sched-body"></tbody>
-                </table>
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <div class="cal-time-col">Time</div>
+                        <div class="cal-day-col">Monday</div>
+                        <div class="cal-day-col">Tuesday</div>
+                        <div class="cal-day-col">Wednesday</div>
+                        <div class="cal-day-col">Thursday</div>
+                        <div class="cal-day-col">Friday</div>
+                        <div class="cal-day-col">Saturday</div>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="cal-grid-bg" id="cal-grid-bg"></div>
+                        <div class="cal-events-layer" id="cal-events-layer">
+                            <div class="cal-day-events" id="day-events-0"></div>
+                            <div class="cal-day-events" id="day-events-1"></div>
+                            <div class="cal-day-events" id="day-events-2"></div>
+                            <div class="cal-day-events" id="day-events-3"></div>
+                            <div class="cal-day-events" id="day-events-4"></div>
+                            <div class="cal-day-events" id="day-events-5"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

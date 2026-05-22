@@ -11,66 +11,155 @@
             try {
                 const parsed = JSON.parse(saved);
                 if (!Array.isArray(parsed)) {
-                    scheduleData = Object.keys(parsed).map(key => ({
-                        name: key,
-                        ...parsed[key]
-                    }));
+                    scheduleData = Object.keys(parsed).map(key => ({ name: key, ...parsed[key] }));
                 } else {
                     scheduleData = parsed;
                 }
-            } catch (e) { 
-                scheduleData = []; 
+            } catch (e) {
+                scheduleData = [];
             }
         }
     }
 
     loadScheduleData();
 
-    function buildSchedule() {
-        const tbody = document.getElementById('sched-body');
-        if (!tbody) return;
+    function getCourseSlotRange(course) {
+        const start = TIMES.findIndex(t => course.times.includes(t));
+        if (start === -1) return null;
+        let end = start;
+        while (end < TIMES.length && course.times.includes(TIMES[end])) end++;
+        return { start, end };
+    }
 
-        tbody.innerHTML = '';
-        const coveredCells = {};
+function buildSchedule() {
+    const gridBg = document.getElementById('cal-grid-bg');
+    const eventsLayer = document.getElementById('cal-events-layer');
+    if (!gridBg || !eventsLayer) return;
 
-        TIMES.forEach((t, timeIndex) => {
-            const tr = document.createElement('tr');
+    gridBg.innerHTML = '';
+    TIMES.forEach(t => {
+        const row = document.createElement('div');
+        row.className = 'cal-grid-row';
+        row.innerHTML = `
+            <div class="cal-grid-time">${t}</div>
+            <div class="cal-grid-lines">
+                <div class="cal-grid-line-col"></div><div class="cal-grid-line-col"></div>
+                <div class="cal-grid-line-col"></div><div class="cal-grid-line-col"></div>
+                <div class="cal-grid-line-col"></div><div class="cal-grid-line-col"></div>
+            </div>
+        `;
+        gridBg.appendChild(row);
+    });
 
-            const timeCell = document.createElement('td');
-            timeCell.textContent = t;
-            tr.appendChild(timeCell);
+    for(let i=0; i<6; i++) {
+        const dayCol = document.getElementById(`day-events-${i}`);
+        if (dayCol) dayCol.innerHTML = '';
+    }
 
-            DAYS.forEach((day, di) => {
-                const cellKey = `${di}-${timeIndex}`;
-                if (coveredCells[cellKey]) return;
+    const ROW_HEIGHT = 40; 
+    const CAL_START_HOUR = 7; 
 
-                let found = null;
-                for (const course of scheduleData) {
-                    if (course.times.includes(t) && course.days.includes(di)) {
-                        found = { name: course.name, info: course };
+    DAYS.forEach((day, di) => {
+        const dayCourses = scheduleData.filter(c => c.days.includes(di));
+        const dayContainer = document.getElementById(`day-events-${di}`);
+        if (!dayContainer) return;
+
+        dayCourses.forEach(course => {
+            if (course.exactStart === undefined) {
+                if (course.times && course.times.length > 0) {
+                    const first = course.times[0].split('–')[0].split(':');
+                    let h1 = parseInt(first[0], 10);
+                    if (h1 >= 1 && h1 <= 6) h1 += 12;
+                    course.exactStart = h1 + (parseInt(first[1], 10) || 0)/60;
+
+                    const last = course.times[course.times.length - 1].split('–')[1].split(':');
+                    let h2 = parseInt(last[0], 10);
+                    if (h2 >= 1 && h2 <= 7) h2 += 12;
+                    course.exactEnd = h2 + (parseInt(last[1], 10) || 0)/60;
+                } else {
+                    course.exactStart = 7; course.exactEnd = 8;
+                }
+            }
+        });
+
+        dayCourses.sort((a, b) => a.exactStart - b.exactStart);
+
+        const groups = [];
+        let currentGroup = [];
+        let groupEnd = 0;
+
+        dayCourses.forEach(course => {
+            if (currentGroup.length === 0) {
+                currentGroup.push(course);
+                groupEnd = course.exactEnd;
+            } else {
+                if (course.exactStart < groupEnd) {
+                    currentGroup.push(course);
+                    groupEnd = Math.max(groupEnd, course.exactEnd);
+                } else {
+                    groups.push(currentGroup);
+                    currentGroup = [course];
+                    groupEnd = course.exactEnd;
+                }
+            }
+        });
+        if (currentGroup.length > 0) groups.push(currentGroup);
+
+        groups.forEach(group => {
+            const columns = [];
+            
+            group.forEach(course => {
+                let placed = false;
+                for (let i = 0; i < columns.length; i++) {
+                    const lastCourse = columns[i][columns[i].length - 1];
+                    if (course.exactStart >= lastCourse.exactEnd) {
+                        columns[i].push(course);
+                        course.colIndex = i;
+                        placed = true;
                         break;
                     }
                 }
-
-                const td = document.createElement('td');
-
-                if (found) {
-                    let rowspan = 1;
-                    for (let i = timeIndex + 1; i < TIMES.length; i++) {
-                        if (found.info.times.includes(TIMES[i])) rowspan++;
-                        else break;
-                    }
-                    for (let i = 0; i < rowspan; i++) coveredCells[`${di}-${timeIndex + i}`] = true;
-                    td.innerHTML = `<span class="cell-block ${found.info.color}" onclick="openCourseDetailModal('${found.name}')" style="cursor: pointer;">${found.name}</span>`;
-                    td.rowSpan = rowspan;
+                if (!placed) {
+                    columns.push([course]);
+                    course.colIndex = columns.length - 1;
                 }
-
-                tr.appendChild(td);
             });
 
-            tbody.appendChild(tr);
+            const numCols = columns.length;
+
+            group.forEach(course => {
+                const topOffset = (course.exactStart - CAL_START_HOUR) * ROW_HEIGHT;
+                const height = (course.exactEnd - course.exactStart) * ROW_HEIGHT;
+                const widthPercent = 100 / numCols;
+                const leftPercent = course.colIndex * widthPercent;
+
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `calendar-event ${course.color || ''}`;
+                eventDiv.style.top = `${topOffset}px`;
+                eventDiv.style.height = `${height}px`;
+                eventDiv.style.left = `${leftPercent}%`;
+                eventDiv.style.width = `calc(${widthPercent}% - 2px)`;
+
+                const formatTime = (timeNum) => {
+                    let h = Math.floor(timeNum);
+                    let m = Math.round((timeNum - h) * 60);
+                    const ampm = h >= 12 ? 'PM' : 'AM';
+                    if (h > 12) h -= 12;
+                    if (h === 0) h = 12;
+                    return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+                };
+
+                eventDiv.innerHTML = `
+                    <div class="event-title">${course.name}</div>
+                    <div class="event-time">${formatTime(course.exactStart)} - ${formatTime(course.exactEnd)}</div>
+                    ${course.room ? `<div class="event-room">${course.room}</div>` : ''}
+                `;
+                eventDiv.onclick = () => openCourseDetailModal(course.name.replace(/'/g, "\\'"));
+                dayContainer.appendChild(eventDiv);
+            });
         });
-    }
+    });
+}
 
     window.openAddModal = function () {
         document.getElementById('addModal').classList.add('show');
@@ -82,8 +171,8 @@
         document.getElementById('courseTimeStart').value = '';
         document.getElementById('courseTimeEnd').value = '';
         Array.from(document.getElementById('courseDays').options).forEach(opt => opt.selected = false);
-        document.getElementById('courseSemester').value = '1-1'; // starts with 1-1 in the semester form
-        document.getElementById('courseUnits').value = ''; // add Unit value in the form
+        document.getElementById('courseSemester').value = '1-1';
+        document.getElementById('courseUnits').value = '';
         document.getElementById('courseRoom').value = '';
         document.querySelectorAll('input[name="courseType"]').forEach(radio => radio.checked = false);
     };
@@ -96,23 +185,12 @@
         const selectedDays = Array.from(courseDaysSelect.selectedOptions).map(opt => parseInt(opt.value, 10));
         const courseType = document.querySelector('input[name="courseType"]:checked')?.value;
         const courseRoom = document.getElementById('courseRoom').value.trim();
-        const semesterValue = document.getElementById('courseSemester').value; // adds semester value in addcourse
-        const courseUnits = Number(document.getElementById("courseUnits").value) || 3; // adds unit value in addcourse
+        const semesterValue = document.getElementById('courseSemester').value;
+        const courseUnits = Number(document.getElementById('courseUnits').value) || 3;
 
         if (!courseName || selectedDays.length === 0) {
             alert('Please enter a course name and select at least one day.');
             return;
-        }
-
-        const existingCourses = scheduleData.filter(c => c.name === courseName);
-        if (existingCourses.length > 0) {
-            const existingDays = existingCourses.flatMap(c => c.days);
-            const conflictingDays = selectedDays.filter(d => existingDays.includes(d));
-            if (conflictingDays.length > 0) {
-                const uniqueConflictingDays = [...new Set(conflictingDays)];
-                const dayNames = uniqueConflictingDays.map(d => DAYS[d]).join(', ');
-                if (!confirm(`"${courseName}" already exists on ${dayNames}. Add anyway?`)) return;
-            }
         }
 
         if (!startTimeValue || !endTimeValue) {
@@ -134,16 +212,12 @@
         }
 
         const matchedSlots = [];
-
         for (const timeSlot of TIMES) {
             const [startPart, endPart] = timeSlot.split('\u2013').map(t => t.trim());
-
             let slotStart = parseInt(startPart.split(':')[0], 10);
             let slotEnd = parseInt(endPart.split(':')[0], 10);
-
             if (slotStart >= 1 && slotStart <= 6) slotStart += 12;
             if (slotEnd >= 1 && slotEnd <= 7) slotEnd += 12;
-
             if (slotStart < inputEnd && slotEnd > inputStart) {
                 matchedSlots.push(timeSlot);
             }
@@ -158,10 +232,12 @@
             name: courseName,
             days: selectedDays,
             times: matchedSlots,
+            exactStart: inputStart,
+            exactEnd: inputEnd,
             type: courseType,
             room: courseRoom,
-            semester: semesterValue, // add semester
-            units: courseUnits, // add units 
+            semester: semesterValue,
+            units: courseUnits,
             color: Math.random() > 0.5 ? 'light' : ''
         });
 
@@ -170,10 +246,9 @@
         window.closeAddModal();
     };
 
-    window.openCourseDetailModal = function (courseName) {
+window.openCourseDetailModal = function (courseName) {
         selectedCourseName = courseName;
         const course = scheduleData.find(c => c.name === courseName);
-
         if (!course) return;
 
         document.getElementById('courseDetailName').textContent = courseName;
@@ -184,20 +259,29 @@
         document.getElementById('courseDetailDays').textContent = dayNames;
 
         let formattedTime = '';
-        if (course.times && course.times.length > 0) {
+        
+        if (course.exactStart !== undefined && course.exactEnd !== undefined) {
+            const formatTime = (timeNum) => {
+                let h = Math.floor(timeNum);
+                let m = Math.round((timeNum - h) * 60);
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                if (h > 12) h -= 12;
+                if (h === 0) h = 12;
+                return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+            };
+            formattedTime = `${formatTime(course.exactStart)} – ${formatTime(course.exactEnd)}`;
+        
+        } else if (course.times && course.times.length > 0) {
             const firstSlot = course.times[0];
             const lastSlot = course.times[course.times.length - 1];
-            
             const formatWithAMPM = (timeStr) => {
                 const hour = parseInt(timeStr.split(':')[0], 10);
                 if (hour >= 7 && hour <= 11) return `${timeStr} AM`;
                 if (hour === 12) return `${timeStr} PM`;
                 return `${timeStr} PM`;
             };
-
             const startTime = formatWithAMPM(firstSlot.split('\u2013')[0].trim());
             const endTime = formatWithAMPM(lastSlot.split('\u2013')[1].trim());
-            
             formattedTime = `${startTime} – ${endTime}`;
         }
 
