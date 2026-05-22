@@ -1812,13 +1812,14 @@ table.sched-table {
 }
 
 .gwa-empty {
-  margin: 0 20px 20px 20px;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  color: #5a8a6a;
-  font-size: 14px;
-  font-weight: 600;
+  display: flex; 
+  align-items: center; 
+  text-align: center;
+  justify-content: center; 
+  color:#5a8a6a; 
+  font-size:14px; 
+  padding:20px; 
+  min-height: 100px;
 }
 
 .gwa-sem-header {
