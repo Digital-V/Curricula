@@ -1,205 +1,203 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Curricula // Attendance Tracker</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <header>
-        <div class="header-top">
-            <img class="profile-img" src="" alt="Profile Image">
-            <h3></h3>
-            <h2></h2>
-            <button class="logout-btn"
-                onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'"><img
-                    src="logout.png" alt="Logout" class="logout-icon"></button>
-        </div>
-        <div id="personalInfoPanel" class="personal-info-panel">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span>Personal Information</span>
-                </div>
-                <div class="personal-panel-layout">
-                    <div class="personal-photo-box">
-                        <div class="personal_img_upload">
-                            <label for="profileImageInput" class="personal-preview-wrap"
-                                aria-label="Change profile image">
-                                <img id="personalPreview" class="personal-preview" src="" alt="Profile preview">
-                                <span class="personal-preview-hint">+</span>
-                            </label>
-                            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
-                        </div>
-                    </div>
-
-                    <div class="personal-form-box">
-                        <div class="modal-form">
-                            <label>Name: </label>
-                            <input type="text" id="personalName">
-
-                            <label>Student Number: </label>
-                            <input type="text" id="personalStudentId">
-
-                            <label>Email: </label>
-                            <input type="email" id="personalEmail">
-
-                            <label>Contact Number: </label>
-                            <input type="tel" id="personalContact">
-
-                            <label>Program: </label>
-                            <input type="text" id="personalCourse">
-
-                            <div class="two-col">
-                                <div class="col">
-                                    <label>Year Level: </label>
-                                    <input type="number" id="personalYearLevel" min="1" max="7" step="1">
-                                </div>
-                                <div class="col">
-                                    <label>Section: </label>
-                                    <input type="text" id="personalSection">
-                                </div>
-                            </div>
-
-                            <label>Status: </label>
-                            <select id="personalStatus">
-                                <option value="enrolled">Regular</option>
-                                <option value="irregular">Irregular</option>
-                            </select>
-
-                            <div class="modal-buttons">
-                                <button class="modal-btn modal-btn-primary personalinfo-btn">Save</button>
-                                <button class="modal-btn modal-btn-secondary clear"
-                                    onclick="clearPersonalInfo()">Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Curricula // Attendance Tracker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-top">
+                <img class="profile-img" src="" alt="Profile Image">
+                <h3></h3>
+                <h2></h2>
+                <button class="logout-btn"
+                    onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'" title="Logout"><img
+                        src="logout.png" alt="Logout" class="logout-icon"></button>
             </div>
-        </div>
-
-        <div id="idPanel" class="id-panel">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span>ID Generator</span>
-                </div>
-                <div class="col">
-                    <div class="personal-id-card id-card">
-                        <div id="idCardHeader" class="id-card-header">
-                            <div id="idCardHeaderText" class="id-card-header-text">
-                                <div
-                                    style="font-size: 25px; letter-spacing: 1px; opacity: 0.85; text-transform: uppercase;">
-                                    Curricula</div>
-                                <div style="font-size: 40px; font-weight: 700; margin-top: 4px;">Student ID</div>
-                            </div>
-                            <div>
-                                <a href="https://ibb.co/fYVnnqQV"><img src="whitelogo.svg" alt="ID Logo"
-                                        class="id-card-logo" alt="5" border="0"></a>
+            <div id="personalInfoPanel" class="personal-info-panel">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Personal Information</span>
+                    </div>
+                    <div class="personal-panel-layout">
+                        <div class="personal-photo-box">
+                            <div class="personal_img_upload">
+                                <label for="profileImageInput" class="personal-preview-wrap"
+                                    aria-label="Change profile image">
+                                    <img id="personalPreview" class="personal-preview" src="" alt="Profile preview">
+                                    <span class="personal-preview-hint">+</span>
+                                </label>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
                             </div>
                         </div>
-                        <div id="idCardBody" class="id-card-body">
-                            <img id="idPersonalImg" class="personal-id-photo id-personal-img"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s"
-                                alt="cutie-pie">
-                            <div class="id-card-grid">
-                                <div class="id-card-info">
-                                    <div
-                                        style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                        Name:</div>
-                                    <div id="idCardName" style="font-size: 14px; font-weight: 700; margin-top: 6px;">—
+
+                        <div class="personal-form-box">
+                            <div class="modal-form">
+                                <label>Name: </label>
+                                <input type="text" id="personalName">
+
+                                <label>Student Number: </label>
+                                <input type="text" id="personalStudentId">
+
+                                <label>Email: </label>
+                                <input type="email" id="personalEmail">
+
+                                <label>Contact Number: </label>
+                                <input type="tel" id="personalContact">
+
+                                <label>Program: </label>
+                                <input type="text" id="personalCourse">
+
+                                <div class="two-col">
+                                    <div class="col">
+                                        <label>Year Level: </label>
+                                        <input type="number" id="personalYearLevel" min="1" max="7" step="1">
+                                    </div>
+                                    <div class="col">
+                                        <label>Section: </label>
+                                        <input type="text" id="personalSection">
                                     </div>
                                 </div>
-                                <div class="id-card-info id-card-info--alt">
-                                    <div
-                                        style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                        Student Number:</div>
-                                    <div id="idCardStudentNumber"
-                                        style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
-                                </div>
-                                <div class="id-card-info">
-                                    <div
-                                        style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                        Program:</div>
-                                    <div id="idCardProgram" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
-                                        —</div>
+
+                                <label>Status: </label>
+                                <select id="personalStatus">
+                                    <option value="enrolled">Regular</option>
+                                    <option value="irregular">Irregular</option>
+                                </select>
+
+                                <div class="modal-buttons">
+                                    <button class="modal-btn modal-btn-primary personalinfo-btn">Save</button>
+                                    <button class="modal-btn modal-btn-secondary clear"
+                                        onclick="clearPersonalInfo()">Clear</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="id-card-small-grid">
-                            <div class="id-card-info">
-                                <div
-                                    style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                    Contact Number:</div>
-                                <div id="idCardContact" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
-                                    —</div>
-                            </div>
-                            <div class="id-card-info">
-                                <div
-                                    style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                    Year:</div>
-                                <div id="idCardYear" style="font-size: 14px; font-weight: 700; margin-top: 6px;">—
-                                </div>
-                            </div>
-                            <div class="id-card-info">
-                                <div
-                                    style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
-                                    Section:</div>
-                                <div id="idCardSection" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
-                                    —</div>
-                            </div>
-                        </div>
-                        <div class="id-card-footer">
-                            <div id="idCardStatus" class="id-card-status">Regular</div>
                         </div>
                     </div>
-                    <div class="modal-btn modal-btn-primary personalinfo-btn download-id-btn"
-                        onclick="generateIDCard()">Download ID Card</div>
                 </div>
-            </div>
-        </div>
-    </header>
 
-    <div id="grid">
-        <div class="sidebar">
-            <button onclick="window.location.href='home.html'">
-                <span class="btn-icon"><img src="calendar.png" alt="Weekly Schedule" class="btn-png-icon"></span>
-            </button>
-            <button class="active" onclick="alert('Attendance Tracker')">
-                <span class="btn-icon"><img src="user-check.png" alt="Attendance Tracker" class="btn-png-icon"></span>
-            </button>
-            <button onclick="window.location.href='todo_list.html'">
-                <span class="btn-icon"><img src="checklist.png" alt="To-Do List" class="btn-png-icon"></span>
-            </button>
-            <button onclick="window.location.href='gwa-calculator.html'">
-                <span class="btn-icon"><img src="balance-sheet.png" alt="GWA Calculator" class="btn-png-icon"></span>
-            </button>
-            <div class="sidebar-label-container">
-                <div class="sidebar-label">CURRICULA</div>
-                <img src="whitelogo.svg" alt="Logo" class="sidebar-logo">
-            </div>
-        </div>
-        <div class="maintab att-maintab">
-            <div class="att-section-title">Attendance by Course</div>
-            <div class="att-legend">
-                <div class="att-legend-item">
-                    <div class="att-legend-dot" style="background:#005201"></div> Present
-                </div>
-                <div class="att-legend-item">
-                    <div class="att-legend-dot" style="background:#e57373"></div> Absent
-                </div>
-                <div class="att-legend-item">
-                    <div class="att-legend-dot"
-                        style="background:rgba(0,82,1,0.08); border:1px solid rgba(0,82,1,0.15)"></div> No class
-                </div>
-            </div>
-            <div id="att-courses"></div>
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="auth.js"></script>
-    <script src="personalinfo.js"></script>
-    <script src="attendance_tracker.js"></script>
-</body>
+                <div id="idPanel" class="id-panel">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span>ID Generator</span>
+                        </div>
+                        <div class="col">
+                            <div class="personal-id-card id-card">
+                                <div id="idCardHeader" class="id-card-header">
+                                    <div id="idCardHeaderText" class="id-card-header-text">
+                                        <div
+                                            style="font-size: 25px; letter-spacing: 1px; opacity: 0.85; text-transform: uppercase;">
+                                            Curricula</div>
+                                        <div style="font-size: 40px; font-weight: 700; margin-top: 4px;">Student ID</div>
+                                    </div>
+                                    <div>
+                                        <a href="https://ibb.co/fYVnnqQV"><img src="whitelogo.svg" alt="ID Logo"
+                                                class="id-card-logo" alt="5" border="0"></a>
+                                    </div>
+                                </div>
+                                <div id="idCardBody" class="id-card-body">
+                                    <img id="idPersonalImg" class="personal-id-photo id-personal-img"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s"
+                                        alt="cutie-pie">
+                                    <div class="id-card-grid">
+                                        <div class="id-card-info">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Name:</div>
+                                            <div id="idCardName"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                        <div class="id-card-info id-card-info--alt">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Student Number:</div>
+                                            <div id="idCardStudentNumber"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                        <div class="id-card-info">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Program:</div>
+                                            <div id="idCardProgram"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="id-card-small-grid">
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Contact Number:</div>
+                                        <div id="idCardContact" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
+                                            —</div>
+                                    </div>
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Year:</div>
+                                        <div id="idCardYear" style="font-size: 14px; font-weight: 700; margin-top: 6px;">—
+                                        </div>
+                                    </div>
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Section:</div>
+                                        <div id="idCardSection" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
+                                            —</div>
+                                    </div>
+                                </div>
+                                <div class="id-card-footer">
+                                    <div id="idCardStatus" class="id-card-status">Regular</div>
+                                </div>
+                            </div>
+                            <div class="modal-btn modal-btn-primary personalinfo-btn download-id-btn"
+                                onclick="generateIDCard()">Download ID Card</div>
+                        </div>
+                    </div>
 
+                </div>
+            </div>
+        </header>
+
+        <div id="grid">
+            <div class="sidebar">
+                <button onclick="window.location.href='home.html'">
+                    <span class="btn-icon"><img src="calendar.png" alt="Weekly Schedule" class="btn-png-icon"></span>
+                </button>
+                <button class="active" onclick="alert('Attendance Tracker')">
+                    <span class="btn-icon"><img src="user-check.png" alt="Attendance Tracker" class="btn-png-icon"></span>
+                </button>
+                <button onclick="window.location.href='todo_list.html'">
+                    <span class="btn-icon"><img src="checklist.png" alt="To-Do List" class="btn-png-icon"></span>
+                </button>
+                <button onclick="window.location.href='gwa-calculator.html'">
+                    <span class="btn-icon"><img src="balance-sheet.png" alt="GWA Calculator" class="btn-png-icon"></span>
+                </button>
+                <div class="sidebar-label-container">
+                    <div class="sidebar-label">CURRICULA</div>
+                    <img src="whitelogo.svg" alt="Logo" class="sidebar-logo">
+                </div>
+            </div>
+            <div class="maintab att-maintab">
+                <div class="att-section-title">Attendance by Course</div>
+                <div class="att-legend">
+                    <div class="att-legend-item">
+                        <div class="att-legend-dot" style="background:#005201"></div> Present
+                    </div>
+                    <div class="att-legend-item">
+                        <div class="att-legend-dot" style="background:#e57373"></div> Absent
+                    </div>
+                    <div class="att-legend-item">
+                        <div class="att-legend-dot"
+                            style="background:rgba(0,82,1,0.08); border:1px solid rgba(0,82,1,0.15)"></div> No class
+                    </div>
+                </div>
+                <div id="att-courses"></div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="auth.js"></script>
+        <script src="personalinfo.js"></script>
+        <script src="attendance_tracker.js"></script>
+    </body>
 </html>
