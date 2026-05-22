@@ -18,6 +18,46 @@
 
 body {
   font-family: "DM Sans", sans-serif;
+  background: url(bg.svg);
+  background-size: cover;
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes markAbsent {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(230, 124, 115, 0.6);
+  }
+
+  50% {
+    transform: scale(0.98) translateX(-2px);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(230, 124, 115, 0.4);
+  }
 }
 
 header {
@@ -33,13 +73,13 @@ header {
   overflow: hidden;
   position: relative;
   z-index: 100;
-  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
 }
 
 header.expanded {
   height: 820px;
   margin-bottom: -750px;
-  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
 }
 
 .header-top {
@@ -91,7 +131,7 @@ header img {
   border-radius: 0 40px 40px 0;
   padding: 10px;
   transition: opacity 0.35s ease;
-  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
   height: 330px;
   width: 110px;
 }
@@ -156,8 +196,8 @@ header img {
 .sidebar-label {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  color: #005201;
-  font-size: 40px;
+  color: #ffffff;
+  font-size: 60px;
   font-weight: 700;
   text-align: center;
   letter-spacing: 5px;
@@ -187,9 +227,9 @@ header img {
 .maintab {
   padding: 10px 20px 10px 20px;
   margin: 0 20px 0 20px;
-  background-color: #ddf2df;
+  background-color: #ffffff;
   border-radius: 40px;
-  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.45);
 }
 
 /* Scrollable maintab for attendance tracker and todo list */
@@ -226,6 +266,7 @@ table.sched-table {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sched-table th {
@@ -277,11 +318,13 @@ table.sched-table {
   box-sizing: border-box;
   cursor: pointer;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .cell-block.light {
   background: #91c691;
   color: #005201;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .sched-table td:has(.cell-block) {
@@ -316,13 +359,16 @@ table.sched-table {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0);
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .modal.show {
   display: flex;
+  animation: fadeInBackdrop 0.3s ease forwards;
+  pointer-events: auto;
 }
 
 .modal-content {
@@ -331,7 +377,8 @@ table.sched-table {
   border-radius: 20px;
   width: 90%;
   max-width: 600px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.45);
+  animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .modal-header {
@@ -379,7 +426,7 @@ table.sched-table {
 .modal-form select {
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1.5px solid #91c691;
+  border: none;
   font-size: 13px;
   font-family: "DM Sans", sans-serif;
   outline: none;
@@ -618,6 +665,7 @@ header.expanded #idPanel {
   justify-content: space-between;
   padding: 24px;
   border-radius: 20px;
+  margin-left: -15px;
   opacity: 0;
   transform: translate(0, -12px);
   pointer-events: none;
@@ -730,7 +778,6 @@ header.expanded #idPanel {
   padding: 14px 12px;
   font-size: 15px;
   border-radius: 12px;
-
   margin-top: 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -821,6 +868,7 @@ table.sched-table {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sched-table th {
@@ -871,13 +919,13 @@ table.sched-table {
   min-height: 60px;
   box-sizing: border-box;
   cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.45);
 }
-
-/* DUPLICATE - Line 817 cell-block removed */
 
 .cell-block.light {
   background: #91c691;
   color: #005201;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.45);
 }
 
 .add-course-btn {
@@ -926,13 +974,16 @@ table.sched-table {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0);
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .course-detail-modal.show {
   display: flex;
+  animation: fadeInBackdrop 0.3s ease forwards;
+  pointer-events: auto;
 }
 
 .course-detail-content {
@@ -942,6 +993,7 @@ table.sched-table {
   width: 90%;
   max-width: 450px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .course-detail-header {
@@ -1046,7 +1098,7 @@ table.sched-table {
 }
 
 .att-course-block {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(145, 198, 145, 0.2);
   border-radius: 14px;
   padding: 12px;
   display: flex;
@@ -1109,27 +1161,34 @@ table.sched-table {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s;
-  font-size: 14px;
+  transition:
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s ease, color 0.25s ease;
+  font-size: 18px;
   color: #005201;
   font-weight: 600;
   padding: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
 }
 
 .att-cell:hover {
-  border-color: #005201;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .att-cell.present {
   background: #005201;
   border-color: #005201;
   color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 82, 1, 0.2);
 }
 
 .att-cell.absent {
   background: #e57373;
   border-color: #c62828;
   color: #fff;
+  box-shadow: 0 4px 12px rgba(230, 124, 115, 0.4);
+  animation: markAbsent 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .att-cell.no-class {
@@ -1223,7 +1282,8 @@ table.sched-table {
   position: sticky;
   bottom: 20px;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 14px;
+  border-radius: 30px;
+  border: 1.5px solid rgba(0, 82, 1, 0.15);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -1231,15 +1291,15 @@ table.sched-table {
   box-sizing: border-box;
   z-index: 100;
   margin-top: auto;
-  box-shadow: 0 0 30px rgb(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgb(0, 0, 0, 0.25);
 }
 
 .todo-add-form input,
 .todo-add-form select {
   padding: 12px 16px;
   border-radius: 50px;
-  border: 1.5px solid #91c691;
-  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  background: rgba(218, 255, 218, 0.9);
   font-family: "DM Sans", sans-serif;
   font-size: 14px;
   color: #005201;
@@ -1289,7 +1349,7 @@ table.sched-table {
 }
 
 .todo-item {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(220, 243, 212, 0.6);
   border-radius: 12px;
   padding: 10px 12px;
   display: flex;
