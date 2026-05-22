@@ -363,8 +363,13 @@ function updateGwaDisplay(gwa) {
     const cumlaude = latinHonor.cumlaude;
 
     if (gwa >= 1.00 && gwa <= 1.21) {
+        // if your in summa range it means you surpass magna and cumlaude. However you can be disqualified if even only one subject did not meet the minimum grade requirement. so I allow downgrade in summa range gwa.
         if (summa) {
             honorDescription.textContent = "Summa Cum Laude";
+        } else if (magna) {
+            honorDescription.textContent = "Magna Cum Laude";
+        } else if (cumlaude) {
+            honorDescription.textContent = "Cum Laude";
         } else {
             honorDescription.textContent = "No Latin Honors";
         }
