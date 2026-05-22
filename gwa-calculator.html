@@ -1,468 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GWA Calculator</title>
-    <link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-    <header>
-        <div class="header-top">
-            <img class="profile-img" src="" alt="Profile Image">
-            <h3></h3>
-            <h2></h2>
-        </div>
-    </header>
-    <div class="grid">
-        <div class="sidebar">
-            <button onclick="window.location.href='home.html'">Weekly Schedule</button>
-            <button onclick="window.location.href='attendance_tracker.html'">Attendance Tracker</button>
-            <button onclick="window.location.href='todo_list.html'">To-Do List</button>
-            <button class="active" onclick="alert('GWA Calculator')">GWA Calculator</button>
-        </div>
-
-        <div class="maintab">
-            <div class="gwa-header">
-                <div>
-                    <div class="gwa-title">GWA Calculator</div>
-                    <div class="gwa-subtitle">Subjects</div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GWA Calculator</title>
+        <link rel="stylesheet" href="style.css">
+    
+    </head>
+    <body>
+        <header>
+            <div class="header-top">
+                <img class="profile-img" src="" alt="Profile Image">
+                <h3></h3>
+                <h2></h2>
+                <button class="logout-btn"
+                    onclick="localStorage.removeItem('sessionUser'); window.location.href='login.html'" title="Logout"><img
+                        src="logout.png" alt="Logout" class="logout-icon"></button>
+            </div>
+            <div id="personalInfoPanel" class="personal-info-panel">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Personal Information</span>
+                    </div>
+                    <div class="personal-panel-layout">
+                        <div class="personal-photo-box">
+                            <div class="personal_img_upload">
+                                <label for="profileImageInput" class="personal-preview-wrap"
+                                    aria-label="Change profile image">
+                                    <img id="personalPreview" class="personal-preview" src="" alt="Profile preview">
+                                    <span class="personal-preview-hint">+</span>
+                                </label>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+    
+                        <div class="personal-form-box">
+                            <div class="modal-form">
+                                <label>Name: </label>
+                                <input type="text" id="personalName">
+    
+                                <label>Student Number: </label>
+                                <input type="text" id="personalStudentId">
+    
+                                <label>Email: </label>
+                                <input type="email" id="personalEmail">
+    
+                                <label>Contact Number: </label>
+                                <input type="tel" id="personalContact">
+    
+                                <label>Program: </label>
+                                <input type="text" id="personalCourse">
+    
+                                <div class="two-col">
+                                    <div class="col">
+                                        <label>Year Level: </label>
+                                        <input type="number" id="personalYearLevel" min="1" max="7" step="1">
+                                    </div>
+                                    <div class="col">
+                                        <label>Section: </label>
+                                        <input type="text" id="personalSection">
+                                    </div>
+                                </div>
+    
+                                <label>Status: </label>
+                                <select id="personalStatus">
+                                    <option value="enrolled">Regular</option>
+                                    <option value="irregular">Irregular</option>
+                                </select>
+    
+                                <div class="modal-buttons">
+                                    <button class="modal-btn modal-btn-primary personalinfo-btn">Save</button>
+                                    <button class="modal-btn modal-btn-secondary clear"
+                                        onclick="clearPersonalInfo()">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="idPanel" class="id-panel">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span>ID Generator</span>
+                        </div>
+                        <div class="col">
+                            <div class="personal-id-card id-card">
+                                <div id="idCardHeader" class="id-card-header">
+                                    <div id="idCardHeaderText" class="id-card-header-text">
+                                        <div
+                                            style="font-size: 25px; letter-spacing: 1px; opacity: 0.85; text-transform: uppercase;">
+                                            Curricula</div>
+                                        <div style="font-size: 40px; font-weight: 700; margin-top: 4px;">Student ID</div>
+                                    </div>
+                                    <div>
+                                        <a href="https://ibb.co/fYVnnqQV"><img src="whitelogo.svg" alt="ID Logo"
+                                                class="id-card-logo" alt="5" border="0"></a>
+                                    </div>
+                                </div>
+                                <div id="idCardBody" class="id-card-body">
+                                    <img id="idPersonalImg" class="personal-id-photo id-personal-img"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrKbtCyHhFP45CksSozABS-HHCLJaWFLADRw&s"
+                                        alt="cutie-pie">
+                                    <div class="id-card-grid">
+                                        <div class="id-card-info">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Name:</div>
+                                            <div id="idCardName"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                        <div class="id-card-info id-card-info--alt">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Student Number:</div>
+                                            <div id="idCardStudentNumber"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                        <div class="id-card-info">
+                                            <div
+                                                style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                                Program:</div>
+                                            <div id="idCardProgram"
+                                                style="font-size: 14px; font-weight: 700; margin-top: 6px;">—</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="id-card-small-grid">
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Contact Number:</div>
+                                        <div id="idCardContact" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
+                                            —</div>
+                                    </div>
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Year:</div>
+                                        <div id="idCardYear" style="font-size: 14px; font-weight: 700; margin-top: 6px;">—
+                                        </div>
+                                    </div>
+                                    <div class="id-card-info">
+                                        <div
+                                            style="font-size: 10px; font-weight: 200; color: #000000; text-transform: uppercase;">
+                                            Section:</div>
+                                        <div id="idCardSection" style="font-size: 14px; font-weight: 700; margin-top: 6px;">
+                                            —</div>
+                                    </div>
+                                </div>
+                                <div class="id-card-footer">
+                                    <div id="idCardStatus" class="id-card-status">Regular</div>
+                                </div>
+                            </div>
+                            <div class="modal-btn modal-btn-primary personalinfo-btn download-id-btn"
+                                onclick="generateIDCard()">Download ID Card</div>
+                        </div>
+                    </div>
+    
                 </div>
             </div>
-
-            <div class="gwa-overall">
-                <div><!--div for gwa label-->
-                    <div class="gwa-label">Cumulative GWA</div>
-                    <!-- the gwa-description will update based on grades inputed (summa, magna, cumlaude or not)-->
-                    <div class="gwa-description" id="honor-description">Add grades to see honors status.</div>
+        </header>
+        <div id="grid">
+            <div class="sidebar">
+                <button onclick="window.location.href='home.html'">
+                    <span class="btn-icon"><img src="calendar.png" alt="Weekly Schedule" class="btn-png-icon"></span>
+                </button>
+                <button onclick="window.location.href='attendance_tracker.html'">
+                    <span class="btn-icon"><img src="user-check.png" alt="Attendance Tracker" class="btn-png-icon"></span>
+                </button>
+                <button onclick="window.location.href='todo_list.html'">
+                    <span class="btn-icon"><img src="checklist.png" alt="To-Do List" class="btn-png-icon"></span>
+                </button>
+                <button class="active" onclick="alert('GWA Calculator')">
+                    <span class="btn-icon"><img src="balance-sheet.png" alt="GWA Calculator" class="btn-png-icon"></span>
+                </button>
+                <div class="sidebar-label-container">
+                    <div class="sidebar-label">CURRICULA</div>
+                    <img src="whitelogo.svg" alt="Logo" class="sidebar-logo">
                 </div>
-                <div class="gwa-value" id="overall-gwa-value">--</div>
             </div>
-
-            <!-- let's create an empty placeholder for semester card, then fill it with subject card using js-->
-            <div class="semester-list" id="semester-list"></div>
-            <div id="gwa-empty" class="gwa-empty" style="display:none;">No subject yet.</div>
-            <!-- the display:none hides this container. If there are no subject to show we use js to show it using display: block-->
-
+    
+            <div class="maintab gwacalc-maintab">
+                <div class="gwa-header">
+                    <div>
+                        <div class="gwa-title">GWA Calculator</div>
+                    </div>
+                </div>
+    
+                <div class="gwa-overall">
+                    <div><!--div for gwa label-->
+                        <div class="gwa-label">Cumulative GWA</div>
+                        <!-- the gwa-description will update based on grades inputed (summa, magna, cumlaude or not)-->
+                        <div class="gwa-description" id="honor-description">Add grades to see honors status.</div>
+                    </div>
+                    <div class="gwa-value" id="overall-gwa-value">--</div>
+                </div>
+    
+                <!-- let's create an empty placeholder for semester card, then fill it with subject card using js-->
+                <div class="semester-list" id="semester-list"></div>
+                <div id="gwa-empty" class="gwa-empty" style="display:none;">No subject yet.</div>
+                <!-- the display:none hides this container. If there are no subject to show we use js to show it using display: block-->
+            </div>
         </div>
-
-    </div>
-
-    <script src="auth.js"></script>
-    <script src="personalinfo.js"></script>
-    <script>
-        // function: read subject, render them, compute GWA, show/hide empty state.
-
-        // 1. grab gthe key elements
-        const semesterList = document.getElementById("semester-list");// empty list later render it using js
-        const overallGWA = document.getElementById("overall-gwa-value");
-        // div with -- to replace later
-        const honorDescription = document.getElementById("honor-description"); // div message to replace when commulatative gwa is computed
-        const emptyGwa = document.getElementById("gwa-empty"); // div message "No subject yet" replace if add subject
-
-        // 2. need a function to load saved data from localStorage then convert it back into an array with error handling to prevent crash if the data is broken or missing
-        function loadSubjectFromSchedule() {
-            const rawData = localStorage.getItem("scheduleData"); // get raw data from local storage\
-            // check if data exist
-            if (!rawData) {
-                return [];
-            }
-            try {
-                const parsedData = JSON.parse(rawData);
-                if (Array.isArray(parsedData)) {
-                    return parsedData;
-                } else {
-                    return [];
-                }
-
-            } catch {
-                return []; // if broken data return empty array.
-            }
-
-
-        }
-        const schedule = loadSubjectFromSchedule(); // scheduleArray
-
-        // 4. convert scheduleData into subjects array
-        function scheduleToSubjects(scheduleArray) {
-            return scheduleArray.map((course) => ({
-                subjectCode: course.name,
-                subjectName: course.name,
-                units: course.units ?? 3,
-                grade: null,
-                semester: course.semester || "1-1"
-            }));
-        }
-        // use then create subject array variable
-        const subjects = scheduleToSubjects(schedule);
-        // subject: {subjectCode: courseName, subjectName: courseName, units: 3, grade: null, semester: courseInfo.semester}
-
-        // additional: merge saved units and grades before rendering:
-        const savedUnits = loadUnitsFromStorage();
-        savedUnits.forEach((saved) => {
-            const subj = subjects.find(
-                (s) => s.subjectCode === saved.subjectCode && s.semester === saved.semester
-            );
-            if (subj && saved.units) subj.units = saved.units;
-            if (subj && saved.grade !== undefined && saved.grade !== null) {
-                subj.grade = saved.grade;
-            }
-        });
-
-        // 5. a function for hide/show the empty state
-        function updateEmptyState(subjects) {
-            if (subjects.length === 0) { // if subject array length is 0 then it's still empty
-                emptyGwa.style.display = "block"; // this is how you update the inline style attribut value 
-                semesterList.innerHTML = ""; // removes the message in the <div>
-
-            } else { // else may laman
-                emptyGwa.style.display = "none" // hides the empty message
-            }
-
-        }
-        updateEmptyState(subjects);
-
-        // 6. group subjects per sem
-        function groupBySemester(subjects) {
-            const groups = {}; // object that will store the grouped subjects
-            // loop through every subject
-            for (let i = 0; i < subjects.length; i++) {
-                const subject = subjects[i];
-
-                const semesterKey = subject.semester || "Unsorted";
-
-                // create a semester array if, check first if it doesn't exist
-                if (!groups[semesterKey]) {
-                    groups[semesterKey] = [];
-                }
-                // add subject
-                groups[semesterKey].push(subject);
-            }
-            return groups;
-
-
-        }
-        let groupedSubjects = groupBySemester(subjects); // includes all the subject in all sem
-
-        //  additional function to exclude nstp and cvsu101 subject in the gwa computation
-        function isExcludedCourse(subject) {
-            const code = String(subject.subjectCode || "").toLowerCase().replace(/\s+/g, "");
-            const name = String(subject.subjectName || "").toLowerCase().replace(/\s+/g, "");
-            return code === "nstp" || code === "cvsu101" || name === "nstp" || name === "cvsu101";
-        }
-
-        // additional:  Add save/load helpers:
-        function saveUnitsToStorage(subjects) {
-            localStorage.setItem("gwaUnits", JSON.stringify(subjects));
-        }
-
-        function loadUnitsFromStorage() {
-            const raw = localStorage.getItem("gwaUnits");
-            if (!raw) return [];
-            try {
-                return JSON.parse(raw);
-            } catch {
-                return [];
-            }
-        }
-
-        function computeSemGwa(subjects) {
-            let totalUnits = 0;
-            let totalPoints = 0;
-
-            for (let i = 0; i < subjects.length; i++) {
-                const subject = subjects[i];
-
-                if (isExcludedCourse(subject)) {// if the subject is === to the excludedCourses then continue(skips the rest of the loop)
-                    continue;
-                }
-
-                // Guard: skip if no grade entered
-                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
-                    continue;
-                }
-
-                const units = Number(subject.units);
-                const grade = Number(subject.grade);
-
-                if (!isNaN(units) && units > 0 && !isNaN(grade) && grade >= 1.0) {
-                    totalUnits += units;
-                    totalPoints += units * grade;
-                }
-            }
-            if (totalUnits === 0) {
-                return null;
-            }
-
-            return totalPoints / totalUnits;
-        }
-
-        const SEMESTERS = [
-            { id: "1-1", label: "1st Year - 1st Sem" },
-            { id: "1-2", label: "1st Year - 2nd Sem" },
-            { id: "2-1", label: "2nd Year - 1st Sem" },
-            { id: "2-2", label: "2nd Year - 2nd Sem" },
-            { id: "3-1", label: "3rd Year - 1st Sem" },
-            { id: "3-2", label: "3rd Year - 2nd Sem" },
-            { id: "4-1", label: "4th Year - 1st Sem" },
-            { id: "4-2", label: "4th Year - 2nd Sem" }
-        ];
-
-        // i need a function to translate the key from input to readable string of semester per year.
-        function getSemesterLabel(semId) {
-            for (let i = 0; i < SEMESTERS.length; i++) {
-                const semester = SEMESTERS[i];
-
-                // find match
-                if (semester.id === semId) {
-                    // return the label if found
-                    return semester.label
-                }
-            }
-            //else return asis
-            return semId;
-        }
-
-        // 7. Render semester cards. eto hindi ko na alam:
-        function renderSemesters(groups) {
-            semesterList.innerHTML = "";
-
-            Object.keys(groups).forEach((semId) => {
-                const semBox = document.createElement("div");
-                semBox.className = "gwa-semester";
-
-                const semSubjects = groups[semId];
-                const semGwa = computeSemGwa(semSubjects);
-
-                const header = document.createElement("div");
-                header.className = "gwa-sem-header";
-
-                const title = document.createElement("div");
-                title.className = "gwa-semester-title";
-                title.textContent = getSemesterLabel(semId);
-
-                const gwaBox = document.createElement("div");
-                gwaBox.className = "gwa-sem-gwa";
-                gwaBox.textContent = `Sem GWA: ${semGwa === null ? "--" : semGwa.toFixed(2)}`;
-
-                header.appendChild(title);
-                header.appendChild(gwaBox);
-
-                const list = document.createElement("div");
-                list.className = "gwa-subject-list";
-
-                semSubjects.forEach((subject) => {
-                    const row = document.createElement("div");
-                    row.className = "gwa-subject-row";
-                    row.innerHTML = `
-                        <div class="gwa-subject-code">${subject.subjectCode}</div>
-                        <div class="gwa-subject-units">
-                        <input
-                            type="number"
-                            min="1"
-                            max="6"
-                            step="1"
-                            value="${subject.units ?? 3}"
-                            data-code="${subject.subjectCode}"
-                            data-sem="${subject.semester}"
-                            class="unit-input"
-                        >
-                        </div>
-                        <div class="gwa-subject-grade">
-                        <input
-                            type="number"
-                            min="1"
-                            max="5"
-                            step="0.01"
-                            value="${subject.grade ?? ""}"
-                            data-code="${subject.subjectCode}"
-                            data-sem="${subject.semester}"
-                            class="grade-input"
-                            placeholder="--"
-                        >
-                        </div>
-                        `;
-                    list.appendChild(row);
-                });
-
-                semBox.appendChild(header);
-                semBox.appendChild(list);
-                semesterList.appendChild(semBox);
-            });
-        }
-
-        function renderAll() {
-            groupedSubjects = groupBySemester(subjects);
-            renderSemesters(groupedSubjects);
-            const gwa = computeCumulativeGwa(groupedSubjects);
-            updateGwaDisplay(gwa);
-        }
-
-        semesterList.addEventListener("change", (e) => {
-            if (e.target.classList.contains("unit-input")) {
-                const code = e.target.dataset.code;
-                const sem = e.target.dataset.sem;
-                const value = Number(e.target.value);
-
-                const subj = subjects.find(
-                    (s) => s.subjectCode === code && s.semester === sem
-                );
-
-                if (subj && !isNaN(value) && value > 0) {
-                    subj.units = value;
-                    saveUnitsToStorage(subjects);
-                    renderAll();
-                }
-            }
-
-            if (e.target.classList.contains("grade-input")) {
-                const code = e.target.dataset.code;
-                const sem = e.target.dataset.sem;
-                const value = Number(e.target.value);
-
-                const subj = subjects.find(
-                    (s) => s.subjectCode === code && s.semester === sem
-                );
-
-                if (subj && !isNaN(value) && value > 0) {
-                    subj.grade = value;
-                    saveUnitsToStorage(subjects);
-                    renderAll();
-                }
-            }
-        });
-
-        // 8. compute the overall GWA 
-        function computeCumulativeGwa(allSubjects) {
-            // Step 1: turn grouped subjects into one list
-            let subjectsList = allSubjects;
-            if (!Array.isArray(allSubjects)) {
-                subjectsList = Object.values(allSubjects || {}).flat();
-            }
-
-            // Step 2: add up total units and total (units * grade)
-            let totalUnits = 0;
-            let totalWeightedGrades = 0;
-
-            for (let i = 0; i < subjectsList.length; i++) {
-                const subject = subjectsList[i];
-
-                // Skip excluded subjects like NSTP and CvSU 101
-                if (isExcludedCourse(subject)) {
-                    continue;
-                }
-
-                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
-                    continue;
-                }
-
-                const units = Number(subject.units);
-                const grade = Number(subject.grade);
-
-                if (!isNaN(units) && units > 0 && !isNaN(grade) && grade >= 1.0) {
-                    totalUnits += units;
-                    totalWeightedGrades += units * grade;
-                }
-            }
-
-            if (totalUnits === 0) {
-                return null;
-            }
-
-            // Step 3: divide total grade points by total units
-            return totalWeightedGrades / totalUnits;
-        }
-        // 9. update the UI with the gwa and honors(if)
-        function updateGwaDisplay(gwa) {
-            if (gwa === null) {// let's check first if gwa is null 
-                overallGWA.textContent = "--"; // change the textContent of the <div class="overallGWA"
-                honorDescription.textContent = "Add grades to see honors status.";
-                return;
-            }
-            overallGWA.textContent = gwa.toFixed(2);
-
-            // latin honors cut off:
-            // Summa: 1.00-1.21;
-            // Magna: 1.22-1.45;
-            // cumlaude: 1.46-1.75;
-            const latinHonor = checkMinimumPerGrade(subjects);
-
-            const summa = latinHonor.summa;
-            const magna = latinHonor.magna;
-            const cumlaude = latinHonor.cumlaude;
-
-            if (gwa >= 1.00 && gwa <= 1.21) {
-                if (summa) {
-                    honorDescription.textContent = "Summa Cum Laude";
-                } else {
-                    honorDescription.textContent = "No Latin Honors";
-                }
-            } else if (gwa >= 1.22 && gwa <= 1.45) {
-                if (magna) {
-                    honorDescription.textContent = "Magna Cum Laude";
-                } else if (cumlaude) {
-                    honorDescription.textContent = "Cum Laude";
-                } else {
-                    honorDescription.textContent = "No Latin Honors";
-                }
-            } else if (gwa >= 1.46 && gwa <= 1.75) {
-                if (cumlaude) {
-                    honorDescription.textContent = "Cum Laude";
-                } else {
-                    honorDescription.textContent = "No Latin Honors";
-                }
-            } else {
-                honorDescription.textContent = "No Latin Honors";
-            }
-
-        }
-        renderAll();
-
-        // I need a function that check the grades in every subject per semester, cause latin honors has a minimum grade requirement per subject return true if it detects a grade below minimum grade
-        function checkMinimumPerGrade(subjects) {
-            let summa = true;
-            let magna = true;
-            let cumlaude = true;
-
-            // loop through all the subject
-            for (let i = 0; i < subjects.length; i++) {
-                const subject = subjects[i];
-
-                // Skip excluded subjects like NSTP and CvSU 101
-                if (isExcludedCourse(subject)) {
-                    continue;
-                }
-                // pass if the grade is missing
-                if (subject.grade === null || subject.grade === undefined || subject.grade === "") {
-                    continue;
-                }
-
-
-                const grade = Number(subject.grade);
-
-                if (!isNaN(grade)) {// verify if a number then proceed to 
-                    if (grade > 1.75) {// if grade is bellow 1.75 then student is not qualified for summa anymore
-                        summa = false;
-                    }
-                    if (grade > 2.00) {
-                        magna = false;
-                    }
-                    if (grade > 2.25) {
-                        cumlaude = false;
-                    }
-
-                }
-            }
-            return { summa, magna, cumlaude };
-
-        }
-
-
-    </script>
-
-</body>
-
+        <script src="auth.js"></script>
+        <script src="personalinfo.js"></script>
+        <script src="gwa-calculator.js"></script>
+    </body>
 </html>
