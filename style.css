@@ -2022,3 +2022,184 @@ table.sched-table {
   margin: 0 !important;
   filter: invert(1) brightness(2);
 }
+
+/* =============================================
+   MOBILE & TABLET RESPONSIVENESS (MAX 900PX)
+   ============================================= */
+@media (max-width: 900px) {
+  
+  #grid {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px;
+    margin-top: 5px; 
+  }
+
+  .header-top {
+    gap: 5px; 
+  }
+  .profile-img {
+    width: 40px;
+    height: 40px;
+    margin: 15px 5px 15px 10px; 
+  }
+  header h3 {
+    font-size: 14px;
+    padding: 0;
+    flex: 1;
+    min-width: 0; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  header h2 {
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 0 5px 0 0;
+    white-space: nowrap;
+  }
+  .logout-btn {
+    margin: 0 10px 0 0 !important; 
+    width: 36px !important;        
+    height: 36px !important;
+    flex-shrink: 0;                
+  }
+  .logout-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .sidebar {
+    width: auto;
+    height: auto;
+    margin: 0 20px 15px 20px; 
+    border-radius: 50px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+  .sidebar-label-container {
+    display: none;
+  }
+  .sidebar button {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  .sidebar button:hover,
+  .sidebar button.active {
+    width: 48px !important;
+    padding: 0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .sidebar button .btn-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    transform: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .schedule-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+  }
+  .schedule-header .schedule-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .add-course-btn, .clear-all-btn {
+    flex: 1;
+    margin-top: 0;
+    text-align: center;
+  }
+
+
+  #att-courses {
+    grid-template-columns: 1fr; 
+  }
+  .att-legend {
+    flex-wrap: wrap; 
+  }
+
+
+  .todo-title {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .todo-counters {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between; 
+  }
+  .todo-add-row {
+    flex-direction: column; 
+  }
+
+  .header-top {
+    gap: 8px; 
+    padding-right: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  header img {
+    padding: 0 !important;
+  }
+
+  .profile-img {
+    width: 38px !important;
+    height: 38px !important;
+    margin-left: 15px !important; 
+  }
+
+  header h3 {
+    font-size: 14px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: 1;
+    min-width: 0; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  header h2 {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    margin: 0 !important;
+    white-space: nowrap;
+  }
+
+  .logout-btn {
+    margin: 0 !important; 
+    padding: 0 !important;
+    width: 36px !important;        
+    height: 36px !important;
+    flex-shrink: 0 !important;                
+  }
+
+  .logout-icon {
+    width: 18px !important;
+    height: 18px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
