@@ -2024,10 +2024,10 @@ table.sched-table {
 }
 
 /* =============================================
-   MOBILE & TABLET RESPONSIVENESS (MAX 900PX)
+   MOBILE & TABLET RESPONSIVENESS
    ============================================= */
 @media (max-width: 900px) {
-  
+    
   #grid {
     display: flex;
     flex-direction: column;
@@ -2201,5 +2201,44 @@ table.sched-table {
     height: 18px !important;
     padding: 0 !important;
     margin: 0 !important;
+  }
+  
+  .gwa-header {
+    padding: 10px 0 !important;
+  }
+  
+  .gwa-overall {
+    margin: 0 0 15px 0 !important;
+    padding: 15px !important;
+  }
+  
+  .semester-list {
+    margin: 0 0 20px 0 !important;
+  }
+
+  .gwa-semester {
+    padding: 12px !important;
+  }
+
+  .gwa-subject-header, .gwa-subject-row {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 8px;
+    padding: 8px 4px !important;
+  }
+  .unit-input, .grade-input {
+    width: 100% !important; 
+    margin-right: 0 !important; 
+    padding: 4px !important;
+    box-sizing: border-box;
+    font-size: 13px !important;
+  }
+
+  .gwa-subject-code {
+    font-size: 12px;
+    word-break: break-word;
+  }
+
+  .gwa-header-label {
+    font-size: 10px;
   }
 }
