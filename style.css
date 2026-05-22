@@ -234,7 +234,8 @@ header img {
 
 /* Scrollable maintab for attendance tracker and todo list */
 .maintab.att-maintab,
-.maintab.todo-maintab {
+.maintab.todo-maintab, 
+.maintab.gwacalc-maintab {
   overflow-y: auto;
   max-height: calc(100vh - 110px);
 }
@@ -1355,6 +1356,7 @@ table.sched-table {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: 15px;
   border-left: 3px solid transparent;
 }
 
@@ -1674,16 +1676,6 @@ table.sched-table {
 }
 
 /* for gwa-calculator */
-#grid,
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  gap: 0;
-  min-height: 900px;
-  align-items: stretch;
-  transition: opacity 0.35s ease;
-}
-
 .gwa-header {
   display: flex;
   align-items: center;
@@ -1772,6 +1764,29 @@ table.sched-table {
   gap: 8px;
 }
 
+.gwa-subject-header {
+  display: grid;
+  grid-template-columns: 1.6fr 0.7fr 0.7fr;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid rgba(0, 82, 1, 0.3);
+}
+
+.gwa-header-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #005201;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.gwa-header-label:nth-child(2),
+.gwa-header-label:nth-child(3) {
+  text-align: center;
+}
+
 .gwa-subject-row {
   display: grid;
   grid-template-columns: 1.6fr 0.7fr 0.7fr;
@@ -1816,6 +1831,31 @@ table.sched-table {
 .gwa-sem-gwa {
   font-weight: 700;
   color: #005201;
+}
+
+.unit-input,
+.grade-input {
+  border-radius: 8px;
+  height: 32px;
+  width: 120px;
+  padding: 3px 10px;
+  border: 1.5px solid rgba(0, 82, 1, 0.2);
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  margin-right: 90px;
+  text-align: center;
+}
+
+.grade-input::-webkit-outer-spin-button,
+.grade-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.grade-input[type=number] {
+  appearance: textfield;
+  outline: none;
+  text-align: center;
 }
 
 .btn-png-icon {
