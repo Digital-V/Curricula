@@ -190,29 +190,49 @@ window.generateIDCard = function () {
         alert('ID card element not found.');
         return;
     }
-    html2canvas(card, { backgroundColor: null, scale: 2, useCORS: true })
-        .then(canvas => {
-            canvas.toBlob(function (blob) {
-                if (!blob) {
-                    alert('Failed to generate image.');
-                    return;
-                }
-                const filenameBase = (document.getElementById('personalStudentId') && document.getElementById('personalStudentId').value.trim()) || 'student-id';
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `${filenameBase}.png`;
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => {
-                    URL.revokeObjectURL(link.href);
-                    link.remove();
-                }, 1000);
-            }, 'image/png');
-        })
-        .catch(err => {
-            console.error('html2canvas error', err);
-            alert('Unable to generate ID image. If you are using an external profile image, upload a local image first.');
-        });
+
+    html2canvas(card, { 
+        backgroundColor: null, 
+        scale: 2, 
+        useCORS: true,
+        onclone: (clonedDoc) => {
+            const img = clonedDoc.getElementById('idPersonalImg');
+            if (img && img.naturalWidth) {
+                const rect = img.getBoundingClientRect();
+                const w = rect.width || img.offsetWidth;
+                const h = rect.height || img.offsetHeight;
+                const svg = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+                        <image href="${img.src}" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"/>
+                    </svg>
+                `;
+                img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+                img.style.objectFit = 'fill'; 
+            }
+        }
+    })
+    .then(canvas => {
+        canvas.toBlob(function (blob) {
+            if (!blob) {
+                alert('Failed to generate image.');
+                return;
+            }
+            const filenameBase = (document.getElementById('personalStudentId') && document.getElementById('personalStudentId').value.trim()) || 'student-id';
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${filenameBase}.png`;
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(() => {
+                URL.revokeObjectURL(link.href);
+                link.remove();
+            }, 1000);
+        }, 'image/png');
+    })
+    .catch(err => {
+        console.error('html2canvas error', err);
+        alert('Unable to generate ID image.');
+    });
 };
 
 document.addEventListener('DOMContentLoaded', loadPersonalInfo);
