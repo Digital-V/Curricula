@@ -58,13 +58,12 @@ function removeDuplicateCourses(subjectsArray) {
 }
 const uniqueSubjects = removeDuplicateCourses(subjects);
 
-// additional: merge saved units and grades before rendering:
+// additional: merge saved grades before rendering:
 const savedUnits = loadUnitsFromStorage();
 savedUnits.forEach((saved) => {
     const subj = uniqueSubjects.find(
         (s) => s.subjectCode === saved.subjectCode && s.semester === saved.semester
     );
-    if (subj && saved.units) subj.units = saved.units;
     if (subj && saved.grade !== undefined && saved.grade !== null) {
         subj.grade = saved.grade;
     }
@@ -114,11 +113,16 @@ function isExcludedCourse(subject) {
 
 // additional:  Add save/load helpers:
 function saveUnitsToStorage(subjects) {
-    localStorage.setItem("gwaUnits", JSON.stringify(subjects));
+    const gradesOnly = subjects.map((subject) => ({
+        subjectCode: subject.subjectCode,
+        semester: subject.semester,
+        grade: subject.grade
+    }));
+    localStorage.setItem("gwaUnits", JSON.stringify(gradesOnly)); // key gwaUnits
 }
 
 function loadUnitsFromStorage() {
-    const raw = localStorage.getItem("gwaUnits");
+    const raw = localStorage.getItem("gwaUnits"); // key gwaUnits
     if (!raw) return [];
     try {
         return JSON.parse(raw);
@@ -227,18 +231,7 @@ function renderSemesters(groups) {
             row.className = "gwa-subject-row";
             row.innerHTML = `
                 <div class="gwa-subject-code">${subject.subjectCode}</div>
-                <div class="gwa-subject-units">
-                <input
-                    type="number"
-                    min="1"
-                    max="6"
-                    step="1"
-                    value="${subject.units ?? 3}"
-                    data-code="${subject.subjectCode}"
-                    data-sem="${subject.semester}"
-                    class="unit-input"
-                >
-                </div>
+                <div class="gwa-subject-units">${subject.units ?? 3}</div>
                 <div class="gwa-subject-grade">
                 <input
                     type="number"
@@ -270,22 +263,6 @@ function renderAll() {
 }
 
 semesterList.addEventListener("change", (e) => {
-    if (e.target.classList.contains("unit-input")) {
-        const code = e.target.dataset.code;
-        const sem = e.target.dataset.sem;
-        const value = Number(e.target.value);
-
-        const subj = uniqueSubjects.find(
-            (s) => s.subjectCode === code && s.semester === sem
-        );
-
-        if (subj && !isNaN(value) && value > 0) {
-            subj.units = value;
-            saveUnitsToStorage(uniqueSubjects);
-            renderAll();
-        }
-    }
-
     if (e.target.classList.contains("grade-input")) {
         const code = e.target.dataset.code;
         const sem = e.target.dataset.sem;

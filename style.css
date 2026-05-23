@@ -1923,6 +1923,11 @@ table.sched-table {
   text-align: right;
 }
 
+.gwa-subject-units {
+  text-align: center;
+  justify-self: center;
+}
+
 .gwa-empty {
   display: flex; 
   align-items: center; 
