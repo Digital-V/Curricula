@@ -150,7 +150,7 @@ function buildSchedule() {
                 };
 
                 eventDiv.innerHTML = `
-                    <div class="event-title" style="font-size: 18px; text-align: center; padding: 10px 5px; margin-top: 15px;">${course.name}</div>
+                <div class="event-title" style="font-size: 16px; text-align: center; padding: 4px 5px; margin-top: 0;">${course.name}</div>
                 `;
                 eventDiv.onclick = () => openCourseDetailModal(course.name.replace(/'/g, "\\'"));
                 dayContainer.appendChild(eventDiv);
