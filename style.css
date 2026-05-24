@@ -77,7 +77,7 @@ header {
 }
 
 header.expanded {
-  height: 830px; //extension lenght for the header yeye
+  height: 810px; //extension lenght for the header yeye
   margin-bottom: -750px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
 }
@@ -695,6 +695,7 @@ header img {
   border-radius: 20px;
   box-sizing: border-box;
 }
+
 header.expanded #personalInfoPanel {
   opacity: 1;
   visibility: visible;
@@ -705,6 +706,7 @@ header.expanded #personalInfoPanel {
     transform 0.3s ease,
     visibility 0s linear 0s;
 }
+
 .personal_img_upload {
   display: flex;
   justify-content: center;
@@ -772,7 +774,7 @@ header.expanded #personalInfoPanel {
 }
 
 /* =============================================
-    ID_CARD.HTML
+    ID_CARD.HTML 
 ============================================= */
 .personal-info-panel {
   display: flex;
@@ -896,7 +898,6 @@ header.expanded #personalInfoPanel {
   background-color: #003d01;
 }
 
-
 #personalInfoPanel .modal-buttons {
   display: flex;
   gap: 12px;
@@ -919,40 +920,28 @@ header.expanded #personalInfoPanel {
   box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
-  #personalInfoPanel {
-    flex-direction: column;
-    align-items: stretch;
-    overflow-y: auto;
-  }
-
-  #idPanel {
-    flex: 1 1 auto;
-    width: 100%;
-  }
-}
-
 /* =============================================
-    MOBILE LAYOUT FOR THE HEADER
+MOBILE RESPONSIVENESS
 ============================================= */
+
 @media (max-width: 1024px) {
-  /* 1. Main Overlay Container Realignment */
   #personalInfoPanel {
+    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     position: absolute;
-    left: 16px;
-    right: 16px;                 
-    width: calc(100% - 32px);    
+    left: 12px;
+    right: 12px;                 
+    width: calc(100% - 24px);    
     top: 85px;
     gap: 20px;               
-    height: auto;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding-bottom: 40px !important; 
+    height: auto !important;
+    max-height: 85vh !important; 
+    overflow-y: auto !important; 
+    padding-bottom: 24px !important;
+    box-sizing: border-box !important;
   }
 
-  /* 2. Personal Information Card */
   #personalInfoPanel > .modal-content {
     flex: none !important;
     max-width: 100% !important;    
@@ -961,9 +950,136 @@ header.expanded #personalInfoPanel {
     padding: 20px 16px;
   }
 
-  /* 3. Convert the Photo + Inputs from Side-by-Side to Stacked Columns */
   .personal-panel-layout {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr !important; 
+    gap: 16px;
+    width: 100%;
+  }
+
+  .personal-photo-box,
+  .personal-form-box {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .modal-form input,
+  .modal-form select {
+    width: 100% !important;
+    box-sizing: border-box;
+    font-size: 16px; 
+  }
+
+  #idPanel {
+    flex: none !important;        
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box;
+  }
+
+  #idPanel > .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important; 
+    box-sizing: border-box !important;
+    height: auto !important;
+    padding: 20px 16px 24px 16px !important;
+    overflow-x: auto !important; 
+    overflow-y: hidden !important;
+  }
+
+  .id-card {
+    width: 380px !important;     
+    min-width: 380px !important;   
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    padding: 16px !important;
+    transform: none !important; 
+    margin: 0 auto !important;
+  }
+
+  .id-card-body {
+    display: flex !important;
+    flex-direction: row !important; 
+    gap: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .id-personal-img {
+    width: 120px !important;
+    height: 140px !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+  }
+
+  .id-card-grid {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+  }
+
+  .id-card-small-grid {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr 1fr !important; 
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+
+  .id-card-small-grid .id-card-info:first-child {
+    grid-column: span 1 !important; 
+  }
+
+  #idPanel .download-id-btn {
+    margin-top: 20px !important;
+    margin-bottom: 0px !important;
+    width: 100% !important;
+    max-width: 380px !important; 
+    margin-left: auto !important;
+    margin-right: auto !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  #personalInfoPanel {
+    flex-direction: column !important; 
+    align-items: center !important;
+    position: absolute;
+    left: 16px;
+    right: 16px;                 
+    width: calc(100% - 32px);    
+    top: 85px;
+    gap: 20px;               
+    height: auto;
+    max-height: 80vh; 
+    overflow-y: auto; 
+    padding-bottom: 40px !important;
+  }
+
+  #personalInfoPanel > .modal-content {
+    flex: none !important;
+    max-width: 100% !important;    
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 20px 16px;
+  }
+
+  .personal-panel-layout {
+    grid-template-columns: 1fr !important; 
     gap: 16px;
     width: 100%;
   }
@@ -990,12 +1106,11 @@ header.expanded #personalInfoPanel {
     font-size: 16px; 
   }
 
-  /* 4. ID Generator Container */
   #idPanel {
     flex: none !important;        
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
+    height: auto !important; 
     box-sizing: border-box;
   }
 
@@ -1009,14 +1124,12 @@ header.expanded #personalInfoPanel {
     height: auto !important;
   }
 
-  /* Give the download button its own clean breathing room layout inside the card container */
   #idPanel .download-id-btn {
     margin-top: 24px !important;
     margin-bottom: 12px !important; 
     flex-shrink: 0 !important;
   }
 
-  /* 5. ID Card Structural Realignment */
   .id-card {
     width: 100% !important;
     max-width: 100% !important;
@@ -1024,14 +1137,35 @@ header.expanded #personalInfoPanel {
     padding: 14px;
   }
 
-
   .id-card-small-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; 
+    gap: 8px !important;
+    margin-top: 10px !important;
   }
 
   .id-card-small-grid .id-card-info:first-child {
-    grid-column: span 2;
+    grid-column: span 2 !important;
+  }
+
+  .id-card-small-grid .id-card-info {
+    padding: 6px 12px !important;
+    min-height: 42px !important;  
+    height: 42px !important;      
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; 
+  }
+
+  .id-card-small-grid .id-card-info div {
+    font-size: 8px !important;
+    line-height: 1 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .id-card-small-grid .id-card-info strong {
+    font-size: 12px !important;
+    line-height: 1.1 !important;
   }
 }
 
