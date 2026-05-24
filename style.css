@@ -1458,6 +1458,37 @@ table.sched-table {
   border-radius: 3px;
 }
 
+.att-controls {
+  margin-top: 8px;
+  margin-bottom: 12px; 
+  display: flex;
+  align-items: center;
+  gap:8px;
+}
+
+.att-controls p {
+  font-size: 14px;
+  color: #005201;
+  font-weight: 600;
+  margin-left: 20px;
+}
+
+.att-controls #att-semester {
+  background-color: #005201;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.att-controls #att-semester:hover {
+  background-color: #007b02;
+}
+
 .att-course-block {
   background: rgba(145, 198, 145, 0.2);
   border-radius: 14px;
