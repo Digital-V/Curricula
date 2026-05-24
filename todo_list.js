@@ -104,6 +104,12 @@
         let filtered = todos.filter(t => {
             if (activeFilter === 'all') return true;
             if (activeFilter === 'pending') return !t.done;
+            if (activeFilter === 'missed') {
+                if (t.done || !t.due) return false;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return new Date(t.due) < today;
+            }
             return t.priority === activeFilter;
         });
 
