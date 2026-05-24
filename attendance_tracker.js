@@ -23,6 +23,46 @@
         return [];
     }
 
+    let selectedSemester = 'all';
+
+    function formatSemesterLabel(code) {
+        if (!code || typeof code !== 'string') return code;
+        const parts = code.split('-');
+        if (parts.length !== 2) return code;
+        const year = parts[0];
+        const sem = parts[1];
+        const ord = n => {
+            if (n === '1') return '1st';
+            if (n === '2') return '2nd';
+            if (n === '3') return '3rd';
+            return `${n}th`;
+        };
+        return `${ord(year)} Year - ${ord(sem)} Semester`;
+    }
+
+    function populateSemesterSelector() {
+        const sel = document.getElementById('att-semester');
+        if (!sel) return;
+        const scheduleData = getCoursesFromHome();
+        const semesters = [...new Set(scheduleData.map(c => c.semester).filter(Boolean))];
+        sel.innerHTML = '';
+        const allOpt = document.createElement('option');
+        allOpt.value = 'all';
+        allOpt.textContent = 'All Semesters';
+        sel.appendChild(allOpt);
+        semesters.forEach(s => {
+            const o = document.createElement('option');
+            o.value = s;
+            o.textContent = formatSemesterLabel(s);
+            sel.appendChild(o);
+        });
+        sel.value = selectedSemester;
+        sel.addEventListener('change', () => {
+            selectedSemester = sel.value;
+            init();
+        });
+    }
+
     function getAttKey() {
         const now = new Date();
         return `attState_${now.getFullYear()}_${now.getMonth()}`;
@@ -46,7 +86,10 @@
     }
 
     function initializeAttendance() {
-        const scheduleData = getCoursesFromHome();
+        let scheduleData = getCoursesFromHome();
+        if (selectedSemester && selectedSemester !== 'all') {
+            scheduleData = scheduleData.filter(c => c.semester === selectedSemester);
+        }
         const uniqueCourses = [...new Set(scheduleData.map(c => c.name))];
         
         const monthDays = getCurrentMonthDays();
@@ -138,6 +181,7 @@
     };
 
     function init() {
+        populateSemesterSelector();
         initializeAttendance();
         buildAttendance();
     }
