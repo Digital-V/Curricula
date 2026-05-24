@@ -1168,6 +1168,11 @@ MOBILE RESPONSIVENESS
     font-size: 12px !important;
     line-height: 1.1 !important;
   }
+
+  .att-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1426,14 +1431,49 @@ table.sched-table {
    ATTENDANCE_TRACKER.HTML
    ============================================= */
 
+.att-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;      
+  gap: 12px;
+  padding: 20px 20px;
+  margin-bottom: 12px;
+}
+
 .att-section-title {
   font-size: 30px;
-  padding: 20px 20px 0 20px;
+  padding: 0;
   font-weight: 1000;
   color: #005201;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin: 0;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.att-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;       
+  flex-shrink: 0;            
+} 
+
+.att-controls button {
+  margin-top: 8px;
+  margin-bottom: 12px; 
+  display: flex;
+  align-items: center;
+  gap:8px;
+  border-radius: 50px;
+  background-color: #005201;
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 16px;
+  transition: background 0.3s;
 }
 
 .att-legend {
@@ -1458,35 +1498,13 @@ table.sched-table {
   border-radius: 3px;
 }
 
-.att-controls {
+.att-controls button {
   margin-top: 8px;
   margin-bottom: 12px; 
   display: flex;
   align-items: center;
   gap:8px;
-}
-
-.att-controls p {
-  font-size: 14px;
-  color: #005201;
-  font-weight: 600;
-  margin-left: 20px;
-}
-
-.att-controls #att-semester {
-  background-color: #005201;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.att-controls #att-semester:hover {
-  background-color: #007b02;
+  margin-left: 800px;
 }
 
 .att-course-block {
@@ -2371,6 +2389,43 @@ table.sched-table {
   }
   .sidebar-label-container {
     display: none;
+  }
+
+  /* keep attendance header compact */
+  /* keep the title font-size unchanged; allow wrapping instead */
+  .att-section-title {
+    font-size: 30px !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.05 !important;
+    white-space: normal !important;
+  }
+
+  .att-controls button {
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+    height: 36px !important;
+  }
+  
+  /* on very small screens, put the download button on its own line */
+  @media (max-width: 420px) {
+    .att-controls {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .att-controls button {
+      width: auto;
+      min-width: 120px;
+    }
+  }
+
+  /* align header items to top so the button stays visible beside wrapped title */
+  .att-header {
+    align-items: flex-start;
+  }
+  .att-controls {
+    align-self: flex-start;
   }
   .sidebar button {
     margin: 0 !important;
