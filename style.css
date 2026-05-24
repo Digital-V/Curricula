@@ -77,9 +77,10 @@ header {
 }
 
 header.expanded {
-  height: 810px; //extension lenght for the header yeye
+  height: 810px;
   margin-bottom: -750px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+  z-index: 1000;
 }
 
 .header-top {
