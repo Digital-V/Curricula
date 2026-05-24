@@ -29,6 +29,7 @@
         if (!code || typeof code !== 'string') return code;
         const parts = code.split('-');
         if (parts.length !== 2) return code;
+        
         const year = parts[0];
         const sem = parts[1];
         const ord = n => {
@@ -178,6 +179,42 @@
         attState[course][day] = s === 'present' ? 'absent' : 'present';
         saveAttState();
         buildAttendance();
+    };
+
+    window.downloadAttendance = function() {
+        try {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+
+            const rows = [];
+            rows.push(['Course','Day','Date','Status']);
+
+            Object.keys(attState).forEach(course => {
+                Object.keys(attState[course]).forEach(dayStr => {
+                    const day = Number(dayStr);
+                    const status = attState[course][day];
+                    if (status === 'no-class') return;
+                    const date = new Date(year, month, day);
+                    const shortDate = isNaN(date) ? '' : `${month + 1}/${day}`;
+                    rows.push([course, day, shortDate, status]);
+                });
+            });
+
+            const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `attendance_${year}_${String(month+1).padStart(2,'0')}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error('Failed to generate attendance download', e);
+            alert('Could not generate download. See console for details.');
+        }
     };
 
     function init() {
