@@ -18,7 +18,7 @@
 
 body {
   font-family: "DM Sans", sans-serif;
-  background: url(bg.svg);
+  background: url(../assets/bg.svg);
   background-size: cover;
 }
 
@@ -1873,7 +1873,7 @@ table.sched-table {
    ============================================= */
 
 .auth-body {
-  background-image: url(bg.svg);
+  background-image: url(../assets/bg.svg);
   background-size: cover;
   display: flex;
   align-items: center;
