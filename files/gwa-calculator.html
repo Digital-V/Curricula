@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>GWA Calculator</title>
         <link rel="stylesheet" href="style.css">
-    
     </head>
     <body>
         <header>
@@ -188,18 +187,14 @@
                 </div>
     
                 <div class="gwa-overall">
-                    <div><!--div for gwa label-->
+                    <div>
                         <div class="gwa-label">Cumulative GWA</div>
-                        <!-- the gwa-description will update based on grades inputed (summa, magna, cumlaude or not)-->
                         <div class="gwa-description" id="honor-description">Add grades to see honors status.</div>
                     </div>
                     <div class="gwa-value" id="overall-gwa-value">--</div>
                 </div>
-    
-                <!-- let's create an empty placeholder for semester card, then fill it with subject card using js-->
                 <div class="semester-list" id="semester-list"></div>
                 <div id="gwa-empty" class="gwa-empty" style="display:none;">No subject yet.</div>
-                <!-- the display:none hides this container. If there are no subject to show we use js to show it using display: block-->
             </div>
         </div>
         <script src="auth.js"></script>
