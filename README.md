@@ -1,4 +1,7 @@
-# Curiculla: A Comprehensive Web-Based Student Companion System
+<div align="center">
+  <img src="./assets/2.svg" width="290" height="290" alt="Curiculla Logo">
+  <h1>Curiculla: A Comprehensive Web-Based Student Companion System</h1>
+</div>
 
 Curiculla is a lightweight front-end web application for conceptual purposes, specialized to be an all-in-one localized student-companion system. The platform is intended for tertiary-level students, providing a fast, user-friendly interface that combines scheduling, task prioritization, authentication, authentication management, and attendance recording to help students manage a heavy course load efficiently and protect their semester General Weighted Average (GWA).
 
