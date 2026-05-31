@@ -53,7 +53,7 @@ body {
 }
 
 /* ===================
-   BODY + HOME.HTML 
+   BODY + INDEX.HTML 
    ==================*/
 header {
   display: block;
@@ -1184,7 +1184,7 @@ header.expanded #personalInfoPanel {
 }
 
 /* =============================================
-   HOME.HTML — WEEKLY SCHEDULE
+   INDEX.HTML — WEEKLY SCHEDULE
    ============================================= */
 
 .schedule-title {

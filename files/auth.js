@@ -103,7 +103,7 @@
             localStorage.setItem('sessionUser', JSON.stringify({ studentId }));
 
             alert("Login successful! Redirecting to Dashboard...");
-            window.location.href = 'home.html';
+            window.location.href = 'index.html';
         });
     }
 
