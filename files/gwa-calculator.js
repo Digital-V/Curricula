@@ -101,6 +101,7 @@ function saveUnitsToStorage(subjects) {
         grade: subject.grade
     }));
     localStorage.setItem("gwaUnits", JSON.stringify(gradesOnly));
+}
 
 function loadUnitsFromStorage() {
     const raw = localStorage.getItem("gwaUnits");
@@ -364,4 +365,3 @@ function checkMinimumPerGrade(subjects) {
     }
     return { summa, magna, cumlaude };
     }
-}

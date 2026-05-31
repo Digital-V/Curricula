@@ -2088,7 +2088,9 @@ table.sched-table {
   letter-spacing: 0.05em;
 }
 
-/* for gwa-calculator */
+/* =============================================
+   GWA CALCULATOR
+   ============================================= */
 .gwa-header {
   display: flex;
   align-items: center;
