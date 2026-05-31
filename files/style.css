@@ -60,6 +60,9 @@ body {
   }
 }
 
+/* ===================
+   BODY + HOME.HTML 
+   ==================*/
 header {
   display: block;
   border-radius: 40px;
@@ -233,7 +236,6 @@ header img {
   box-shadow: 0 0 10px rgb(0, 0, 0, 0.45);
 }
 
-/* Scrollable maintab for attendance tracker and todo list */
 .maintab.att-maintab,
 .maintab.todo-maintab, 
 .maintab.gwacalc-maintab {
@@ -630,9 +632,6 @@ header img {
   background-color: #c62828;
 }
 
-/* =============================================
-   headers sa lahat ng pages, pati na rin yung personal info panel sa header
-   ============================================= */
 .personalinfo-btn {
   background-color: #005201;
   color: white;
@@ -922,8 +921,8 @@ header.expanded #personalInfoPanel {
 }
 
 /* =============================================
-MOBILE RESPONSIVENESS
-============================================= */
+   MOBILE RESPONSIVENESS
+   ========================================== */
 
 @media (max-width: 1024px) {
   #personalInfoPanel {
@@ -1329,8 +1328,6 @@ table.sched-table {
 .clear-all-btn:hover {
   background-color: #c62828;
 }
-
-/* Course Detail Modal */
 
 .course-detail-modal {
   display: none;
@@ -2391,8 +2388,6 @@ table.sched-table {
     display: none;
   }
 
-  /* keep attendance header compact */
-  /* keep the title font-size unchanged; allow wrapping instead */
   .att-section-title {
     font-size: 30px !important;
     letter-spacing: 0.08em !important;
@@ -2406,7 +2401,6 @@ table.sched-table {
     height: 36px !important;
   }
   
-  /* on very small screens, put the download button on its own line */
   @media (max-width: 420px) {
     .att-controls {
       width: 100%;
@@ -2420,7 +2414,6 @@ table.sched-table {
     }
   }
 
-  /* align header items to top so the button stays visible beside wrapped title */
   .att-header {
     align-items: flex-start;
   }
