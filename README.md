@@ -32,7 +32,6 @@ Curiculla is a lightweight front-end web application for conceptual purposes, sp
 ```text
 ├── assets/                       # UI icons, profile graphics, and branding assets
 ├── files/
-│   ├── README.md                 # Project documentation and setup guide
 │   ├── attendance_tracker.html   # Monthly attendance compliance workspace
 │   ├── attendance_tracker.js     # Calendar grid generation & checkbox log toggles
 │   ├── auth.js                   # Client-side user state control logic
@@ -46,3 +45,4 @@ Curiculla is a lightweight front-end web application for conceptual purposes, sp
 │   ├── style.css                 # Monochromatic green UI layout & visual hierarchies
 │   ├── todo_list.html            # Task priority management view
 │   └── todo_list.js              # Stack-based prioritization array logic & status counters
+├── README.md                     # Project documentation and setup guide
