@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/2.svg" width="290" height="290" alt="Curiculla Logo">
+  <img src="./assets/2.svg" width="120" height="120" alt="Curiculla Logo">
   <h1>Curiculla: A Comprehensive Web-Based Student Companion System</h1>
 </div>
 
