@@ -1,9 +1,7 @@
 (function () {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-
-    // Route guard — redirect to login if no session exists
-    // (runs on every page that includes auth.js except login/register themselves)
+    
     if (!loginForm && !registerForm) {
         const session = localStorage.getItem('sessionUser');
         if (!session) {
