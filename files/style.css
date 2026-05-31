@@ -8,14 +8,6 @@
   padding: 0;
 }
 
-@font-face {
-  font-family: "DM Sans";
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-  src: url(https://gstatic.com) format("woff2");
-}
-
 body {
   font-family: "DM Sans", sans-serif;
   background: url(../assets/bg.svg);
@@ -1206,26 +1198,6 @@ header.expanded #personalInfoPanel {
   margin-bottom: 16px;
 }
 
-.schedule-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 20px 0 20px;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.schedule-header .schedule-title {
-  padding: 0;
-  margin-bottom: 0;
-  flex: 1;
-}
-
-.schedule-wrap {
-  overflow-x: auto;
-  border-radius: 12px;
-}
-
 table.sched-table {
   width: 100%;
   border-collapse: collapse;
@@ -1234,38 +1206,6 @@ table.sched-table {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.sched-table th {
-  background: #005201;
-  color: #fff;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 18px;
-  text-align: center;
-}
-
-.sched-table td {
-  border: 1px solid rgba(0, 82, 1, 0.15);
-  padding: 16px 18px;
-  text-align: center;
-  font-size: 14px;
-  color: #1a1a1a;
-  vertical-align: middle;
-  min-height: 80px;
-}
-
-.sched-table tr:nth-child(even) td {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.sched-table td:first-child {
-  font-weight: 700;
-  color: #005201;
-  background: rgba(0, 82, 1, 0.08);
 }
 
 .cell-block {
@@ -1285,30 +1225,6 @@ table.sched-table {
   box-sizing: border-box;
   cursor: pointer;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.45);
-}
-
-.cell-block.light {
-  background: #91c691;
-  color: #005201;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.45);
-}
-
-.add-course-btn {
-  background-color: #005201;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.3s;
-  white-space: nowrap;
-  margin-top: 10px;
-}
-
-.add-course-btn:hover {
-  background-color: #003d01;
 }
 
 .clear-all-btn {
